@@ -13,12 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files from uploads directory
-app.use(
-  '/api/uploads',
-  express.static(
-    path.join(__dirname, '..', process.env.UPLOAD_PATH || 'uploads')
-  )
-);
+app.use('/api/uploads', express.static(path.join(__dirname, '..', process.env.UPLOAD_PATH || 'uploads')));
 
 // Routes
 app.use('/api/users', userRoutes);
