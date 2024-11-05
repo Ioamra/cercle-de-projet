@@ -1,11 +1,6 @@
-CREATE TABLE qcm(
+CREATE TABLE quiz(
    id SERIAL,
-   question TEXT NOT NULL,
-   true_response TEXT NOT NULL,
-   false_response_one TEXT NOT NULL,
-   false_response_two TEXT NOT NULL,
-   false_response_three TEXT NOT NULL,
-   description VARCHAR(50) NOT NULL,
+   description TEXT NOT NULL,
    PRIMARY KEY(id)
 );
 
@@ -25,6 +20,23 @@ CREATE TABLE avatar(
    PRIMARY KEY(id)
 );
 
+CREATE TABLE question(
+   id SERIAL,
+   content TEXT NOT NULL,
+   id_quiz INTEGER NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_quiz) REFERENCES quiz(id)
+);
+
+CREATE TABLE response(
+   id SERIAL,
+   content VARCHAR(255) NOT NULL,
+   is_correct BOOLEAN NOT NULL,
+   id_question INTEGER NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_question) REFERENCES question(id)
+);
+
 CREATE TABLE user_account(
    id SERIAL,
    email VARCHAR(255) NOT NULL,
@@ -38,14 +50,26 @@ CREATE TABLE user_account(
    FOREIGN KEY(id_avatar) REFERENCES avatar(id)
 );
 
-CREATE TABLE qcm_result(
+CREATE TABLE quiz_result(
    id SERIAL,
-   note INTEGER,
-   id_qcm INTEGER NOT NULL,
+   note INTEGER NOT NULL,
+   creation_date TIMESTAMP DEFAULT NOW(),
+   id_quiz INTEGER NOT NULL,
    id_user_account INTEGER NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_qcm) REFERENCES qcm(id),
+   FOREIGN KEY(id_quiz) REFERENCES quiz(id),
    FOREIGN KEY(id_user_account) REFERENCES user_account(id)
+);
+
+CREATE TABLE user_response(
+   id SERIAL,
+   id_response INTEGER NOT NULL,
+   id_question INTEGER NOT NULL,
+   id_quiz_result INTEGER NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_response) REFERENCES response(id),
+   FOREIGN KEY(id_question) REFERENCES question(id),
+   FOREIGN KEY(id_quiz_result) REFERENCES quiz_result(id)
 );
 
 CREATE TABLE user_account_has_friend(
@@ -65,11 +89,11 @@ CREATE TABLE lesson_has_similary(
    FOREIGN KEY(id_lesson_similary) REFERENCES lesson(id)
 );
 
-CREATE TABLE qcm_has_lesson(
-   id_qcm INTEGER,
+CREATE TABLE quiz_has_lesson(
+   id_quiz INTEGER,
    id_lesson INTEGER,
-   PRIMARY KEY(id_qcm, id_lesson),
-   FOREIGN KEY(id_qcm) REFERENCES qcm(id),
+   PRIMARY KEY(id_quiz, id_lesson),
+   FOREIGN KEY(id_quiz) REFERENCES quiz(id),
    FOREIGN KEY(id_lesson) REFERENCES lesson(id)
 );
 
