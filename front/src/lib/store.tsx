@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import React, { createContext, ReactNode, useContext, useReducer } from 'react';
 
 interface User {
   id: number;
@@ -13,9 +13,7 @@ interface AuthState {
   user: User | null;
 }
 
-type AuthAction =
-  | { type: 'SET_AUTH'; payload: { token: string; user: User } }
-  | { type: 'LOGOUT' };
+type AuthAction = { type: 'SET_AUTH'; payload: { token: string; user: User } } | { type: 'LOGOUT' };
 
 const initialState: AuthState = {
   token: null,
@@ -47,11 +45,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  return (
-    <AuthContext.Provider value={{ state, dispatch }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

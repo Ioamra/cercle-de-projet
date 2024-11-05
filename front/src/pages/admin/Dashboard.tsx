@@ -76,15 +76,9 @@ function AdminDashboard() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
           <div className="space-y-4">
-            <button className="w-full text-left px-4 py-3 rounded-lg bg-gray-50 hover:bg-gray-100">
-              Create New Quiz
-            </button>
-            <button className="w-full text-left px-4 py-3 rounded-lg bg-gray-50 hover:bg-gray-100">
-              Add New Lesson
-            </button>
-            <button className="w-full text-left px-4 py-3 rounded-lg bg-gray-50 hover:bg-gray-100">
-              Manage Users
-            </button>
+            <button className="w-full text-left px-4 py-3 rounded-lg bg-gray-50 hover:bg-gray-100">Create New Quiz</button>
+            <button className="w-full text-left px-4 py-3 rounded-lg bg-gray-50 hover:bg-gray-100">Add New Lesson</button>
+            <button className="w-full text-left px-4 py-3 rounded-lg bg-gray-50 hover:bg-gray-100">Manage Users</button>
           </div>
         </div>
       </div>

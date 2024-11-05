@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../lib/store';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../../lib/api';
+import { useAuth } from '../../lib/store';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -21,7 +21,7 @@ function Register() {
       const { token, user } = await auth.register(username, email, password);
       dispatch({ type: 'SET_AUTH', payload: { token, user } });
       navigate('/');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to register');
     } finally {
@@ -38,11 +38,7 @@ function Register() {
           <h1 className="text-2xl font-bold text-gray-900">Create an Account</h1>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-            {error}
-          </div>
-        )}
+        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

@@ -1,17 +1,16 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './components/layout/Navbar';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './components/layout/Footer';
+import Navbar from './components/layout/Navbar';
 import Home from './pages/Home';
+import AdminDashboard from './pages/admin/Dashboard';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
-import Quizzes from './pages/quizzes/Quizzes';
-import Lessons from './pages/lessons/Lessons';
 import Lesson from './pages/lessons/Lesson';
+import Lessons from './pages/lessons/Lessons';
 import Profile from './pages/profile/Profile';
+import Quizzes from './pages/quizzes/Quizzes';
 import Friends from './pages/social/Friends';
 import Leaderboard from './pages/social/Leaderboard';
-import AdminDashboard from './pages/admin/Dashboard';
 
 function App() {
   return (

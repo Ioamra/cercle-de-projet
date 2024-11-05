@@ -37,10 +37,7 @@ function Friends() {
         <div className="p-6">
           <div className="space-y-6">
             {friends.map((friend) => (
-              <div
-                key={friend.id}
-                className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
-              >
+              <div key={friend.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
                 <div className="flex items-center space-x-4">
                   <div className="bg-green-100 p-3 rounded-full">
                     <span className="h-6 w-6 text-green-600">👥</span>
@@ -48,14 +45,8 @@ function Friends() {
                   <div>
                     <h3 className="font-semibold text-gray-900">{friend.username}</h3>
                     <div className="flex items-center space-x-2">
-                      <span
-                        className={`h-2 w-2 rounded-full ${
-                          friend.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
-                        }`}
-                      />
-                      <span className="text-sm text-gray-600">
-                        {friend.status === 'online' ? 'Online' : `Last seen ${friend.lastActive}`}
-                      </span>
+                      <span className={`h-2 w-2 rounded-full ${friend.status === 'online' ? 'bg-green-500' : 'bg-gray-400'}`} />
+                      <span className="text-sm text-gray-600">{friend.status === 'online' ? 'Online' : `Last seen ${friend.lastActive}`}</span>
                     </div>
                   </div>
                 </div>

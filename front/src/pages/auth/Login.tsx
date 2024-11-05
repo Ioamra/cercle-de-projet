@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../lib/store';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../../lib/api';
+import { useAuth } from '../../lib/store';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ function Login() {
       const { token, user } = await auth.login(email, password);
       dispatch({ type: 'SET_AUTH', payload: { token, user } });
       navigate('/');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to login');
     } finally {
@@ -37,11 +37,7 @@ function Login() {
           <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-            {error}
-          </div>
-        )}
+        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
