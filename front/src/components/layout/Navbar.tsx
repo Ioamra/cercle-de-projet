@@ -12,7 +12,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-main-one text-white shadow-lg">
+    <nav className="bg-main-four text-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
@@ -32,7 +32,7 @@ function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/" className="flex items-center space-x-1 hover:text-orange-200">
+            <Link to="/" className="flex items-center space-x-1 hover:text-main-two">
               <svg
                 className="h-4 w-4"
                 viewBox="0 0 24 24"
@@ -46,7 +46,7 @@ function Navbar() {
               </svg>
               <span>Accueil</span>
             </Link>
-            <Link to="/quizzes" className="flex items-center space-x-1 hover:text-orange-200">
+            <Link to="/quizzes" className="flex items-center space-x-1 hover:text-main-two">
               <svg
                 className="h-4 w-4"
                 viewBox="0 0 24 24"
@@ -60,7 +60,7 @@ function Navbar() {
               </svg>
               <span>Quizz</span>
             </Link>
-            <Link to="/lessons" className="flex items-center space-x-1 hover:text-orange-200">
+            <Link to="/lessons" className="flex items-center space-x-1 hover:text-main-two">
               <svg
                 className="h-4 w-4"
                 viewBox="0 0 24 24"
@@ -74,7 +74,7 @@ function Navbar() {
               </svg>
               <span>Leçon</span>
             </Link>
-            <Link to="/friends" className="flex items-center space-x-1 hover:text-orange-200">
+            <Link to="/friends" className="flex items-center space-x-1 hover:text-main-two">
               <svg
                 className="h-4 w-4"
                 viewBox="0 0 24 24"
@@ -91,7 +91,7 @@ function Navbar() {
               </svg>
               <span>Amis</span>
             </Link>
-            <Link to="/leaderboard" className="flex items-center space-x-1 hover:text-orange-200">
+            <Link to="/leaderboard" className="flex items-center space-x-1 hover:text-main-two">
               <svg
                 className="h-4 w-4"
                 viewBox="0 0 24 24"
@@ -110,7 +110,7 @@ function Navbar() {
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <Link to="/profile" className="flex items-center space-x-1 hover:text-orange-200">
+                <Link to="/profile" className="flex items-center space-x-1 hover:text-main-two">
                   <svg
                     className="h-4 w-4"
                     viewBox="0 0 24 24"
@@ -125,7 +125,7 @@ function Navbar() {
                   </svg>
                   <span>{user.username}</span>
                 </Link>
-                <button onClick={handleLogout} className="flex items-center space-x-1 hover:text-orange-200">
+                <button onClick={handleLogout} className="flex items-center space-x-1 hover:text-main-two">
                   <svg
                     className="h-4 w-4"
                     viewBox="0 0 24 24"
@@ -143,7 +143,7 @@ function Navbar() {
                 </button>
               </>
             ) : (
-              <Link to="/login" className="bg-white text-main-one px-4 py-2 rounded-lg hover:bg-orange-50">
+              <Link to="/login" className="bg-white text-main-five px-4 py-2 rounded-lg hover:bg-main-two hover:text-main-one">
                 Connexion
               </Link>
             )}

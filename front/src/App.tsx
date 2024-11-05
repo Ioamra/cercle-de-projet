@@ -15,7 +15,7 @@ import Leaderboard from './pages/social/Leaderboard';
 function App() {
   return (
     <BrowserRouter>
-      <div className="flex flex-col min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+      <div className="flex flex-col min-h-screen bg-[#F9F6F1] from-green-50 to-blue-50 bg-gradient-to">
         <Navbar />
         <main className="flex-grow container mx-auto px-4 py-8">
           <Routes>

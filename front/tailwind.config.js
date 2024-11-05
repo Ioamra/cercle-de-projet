@@ -4,12 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        'main-one': '#e5af84',
-        'main-two': '#d48f89',
-        'main-three': '#b1798e',
-        'main-four': '#826989',
-        'main-five': '#535a76',
-        'main-six': '#2f4858'
+        'main-one': '#F9F6F1',
+        'main-two': '#D9A76F',
+        'main-three': '#633E00',
+        'main-four': '#606C38',
+        'main-five': '#323C00',
       }
     },
   },
