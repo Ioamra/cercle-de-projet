@@ -1,19 +1,12 @@
 import { useParams } from 'react-router-dom';
+import { getLesson } from '../../services/lessonService';
 
 function Lesson() {
+  const lesson = getLesson();
+
   const { id } = useParams<{ id: string }>();
-  const title = `Titre de la Leçon ${id}`;
-  const content = `
-    Contenu de la leçon avec des informations fictives pour l'exemple.
-
-    **Points Clés :**
-    - Point important 1
-    - Point important 2
-    - Point important 3
-
-    **Résumé :**
-    Une brève description de ce que l'étudiant apprendra dans cette leçon.
-  `;
+  const title = id ? lesson.find((lesson) => lesson.id === parseInt(id))?.title : '';
+  const content = id ? lesson.find((lesson) => lesson.id === parseInt(id))?.content || '' : '';
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">

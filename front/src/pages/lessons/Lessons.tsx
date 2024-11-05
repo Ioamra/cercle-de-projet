@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { getLessons } from '../../services/lessonService';
+import { getLessons } from '../../services/lessonsService';
 
 function Lessons() {
   const lessons = getLessons();
