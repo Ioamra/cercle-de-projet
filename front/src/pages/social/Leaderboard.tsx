@@ -1,12 +1,8 @@
-const leaderboard = [
-  { id: 1, username: 'EcoMaster', points: 2500, rank: 1 },
-  { id: 2, username: 'GreenHero', points: 2200, rank: 2 },
-  { id: 3, username: 'EarthGuardian', points: 2000, rank: 3 },
-  { id: 4, username: 'PlanetSaver', points: 1800, rank: 4 },
-  { id: 5, username: 'EcoWarrior', points: 1600, rank: 5 },
-];
+import { getLeaderboard } from '../../services/leaderboardService';
 
 function Leaderboard() {
+  const leaderboard = getLeaderboard();
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center">

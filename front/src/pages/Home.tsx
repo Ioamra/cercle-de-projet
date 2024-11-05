@@ -11,7 +11,10 @@ function Home() {
           différence pour notre environnement.
         </p>
         <div className="flex justify-center gap-4">
-          <Link to="/register" className="bg-main-two border-2 text-white px-8 py-3 rounded-lg hover:bg-main-one hover:border-white transition">
+          <Link
+            to="/register"
+            className="bg-main-two border-2 border-main-two text-white px-8 py-3 rounded-lg hover:bg-main-one hover:border-white transition"
+          >
             Commencer
           </Link>
           <Link
