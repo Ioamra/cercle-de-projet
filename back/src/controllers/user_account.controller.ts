@@ -4,7 +4,11 @@ import { generateToken } from '../services/jwt.service';
 
 type User = {
   id: number;
-  role: string;
+  email: string;
+  pseudo: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
 };
 
 const login = async (req: Request, res: Response) => {
@@ -13,14 +17,25 @@ const login = async (req: Request, res: Response) => {
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
-    const query = `SELECT COUNT(*) as exist, id, role FROM user_account WHERE email = $1 AND password = $2 GROUP BY id;`;
+    const query = `SELECT COUNT(*) as exist, user_account.id, role, email, pseudo, first_name, last_name, avatar.img AS avatar
+    FROM user_account INNER JOIN avatar ON avatar.id = user_account.id_avatar WHERE email = $1 AND password = $2 GROUP BY user_account.id, avatar.img;`;
     const { rows } = await pool.query(query, [email, password]);
     if (rows[0].exist == 1) {
       const user: User = {
         id: rows[0].id,
-        role: rows[0].role,
+        email: rows[0].email,
+        pseudo: rows[0].pseudo,
+        first_name: rows[0].first_name,
+        last_name: rows[0].last_name,
+        avatar: 'localhost:3000/api/img/' + rows[0].avatar,
       };
-      return res.status(200).json({ token: generateToken(user) });
+      return res.status(200).json({
+        token: generateToken({
+          id: rows[0].id,
+          role: rows[0].role,
+        }),
+        user,
+      });
     } else {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
@@ -47,12 +62,24 @@ const register = async (req: Request, res: Response) => {
           `INSERT INTO user_account (email, pseudo, first_name, last_name, password, role, id_avatar) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;`,
           [email, pseudo, first_name, last_name, password, 'user', id_avatar],
         );
-
-        const user: User = {
-          id: rows[0].id,
-          role: 'user',
-        };
-        return res.status(200).json({ token: generateToken(user) });
+        const { rows: avatarRows } = await pool.query(
+          `SELECT img FROM user_account INNER JOIN avatar ON avatar.id = user_account.id_avatar WHERE user_account.id = $1;`,
+          [rows[0].id],
+        );
+        return res.status(200).json({
+          token: generateToken({
+            id: rows[0].id,
+            role: 'user',
+          }),
+          user: {
+            id: rows[0].id,
+            email,
+            pseudo,
+            first_name,
+            last_name,
+            avatar: 'localhost:3000/api/img/' + avatarRows[0].img,
+          },
+        });
       }
     }
   } catch (error) {
