@@ -1,18 +1,16 @@
-import { request } from '../requestService';
+import CryptoJS from 'crypto-js';
+import { apiServiceWithoutToken } from '../requestService';
 
 export const login = async (email: string, password: string) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-
-  const response = await request('/user-account/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password: hashHex }),
-  });
-  return response;
+  try {
+    const response = await apiServiceWithoutToken.post('/user-account/login', {
+      email: email,
+      password: CryptoJS.SHA256(password).toString(),
+    });
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', response.data.user);
+    return 'ok';
+  } catch (error) {
+    return { error };
+  }
 };

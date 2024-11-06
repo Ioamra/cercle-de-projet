@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../lib/store';
 import { register } from '../../services/auth/registerService';
 
 function Register() {
@@ -14,7 +13,6 @@ function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { dispatch } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,9 +26,10 @@ function Register() {
     setLoading(true);
 
     try {
-      const { token, user } = await register(email, pseudo, firstName, lastName, password, idAvatar);
-      dispatch({ type: 'SET_AUTH', payload: { token, user } });
-      navigate('/');
+      const res = await register(email, pseudo, firstName, lastName, password, idAvatar);
+      if (res === 'ok') {
+        navigate('/');
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || "Échec de l'enregistrement");
     } finally {

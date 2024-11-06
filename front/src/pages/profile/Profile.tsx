@@ -1,8 +1,5 @@
-import { useAuth } from '../../lib/store';
-
 function Profile() {
-  const { state } = useAuth();
-  const { user } = state;
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   if (!user) {
     return null;
