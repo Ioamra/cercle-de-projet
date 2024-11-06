@@ -39,16 +39,21 @@ const register = async (req: Request, res: Response) => {
     if (rows[0].mail_exist != 0) {
       return res.status(409).json({ message: 'Email already in use.' });
     } else {
-      const { rows } = await pool.query(
-        `INSERT INTO user_account (email, pseudo, first_name, last_name, password, role, id_avatar) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;`,
-        [email, pseudo, first_name, last_name, password, 'user', id_avatar],
-      );
+      const { rows } = await pool.query(`SELECT COUNT(pseudo) AS pseudo_exist FROM user_account WHERE pseudo = $1;`, [pseudo]);
+      if (rows[0].pseudo_exist != 0) {
+        return res.status(409).json({ message: 'Pseudo already in use.' });
+      } else {
+        const { rows } = await pool.query(
+          `INSERT INTO user_account (email, pseudo, first_name, last_name, password, role, id_avatar) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;`,
+          [email, pseudo, first_name, last_name, password, 'user', id_avatar],
+        );
 
-      const user: User = {
-        id: rows[0].id,
-        role: 'user',
-      };
-      return res.status(200).json({ token: generateToken(user) });
+        const user: User = {
+          id: rows[0].id,
+          role: 'user',
+        };
+        return res.status(200).json({ token: generateToken(user) });
+      }
     }
   } catch (error) {
     console.log(error);
