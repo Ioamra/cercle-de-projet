@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../lib/store';
 
@@ -5,6 +6,7 @@ function Navbar() {
   const { state, dispatch } = useAuth();
   const { user } = state;
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
@@ -15,6 +17,7 @@ function Navbar() {
     <nav className="bg-main-four text-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          {/* Logo et titre */}
           <Link to="/" className="flex items-center space-x-2">
             <svg
               className="h-8 w-8"
@@ -31,59 +34,28 @@ function Navbar() {
             <span className="font-bold text-xl">Kestrel</span>
           </Link>
 
+          {/* Menu desktop */}
           <div className="hidden md:flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-1 hover:text-main-two">
-              <svg
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 12l2-2m0 0l7-7 7 7m-9 9v-6h4v6m5 0h-14"></path>
               </svg>
               <span>Accueil</span>
             </Link>
             <Link to="/quizzes" className="flex items-center space-x-1 hover:text-main-two">
-              <svg
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"></path>
               </svg>
               <span>Quizz</span>
             </Link>
             <Link to="/lessons" className="flex items-center space-x-1 hover:text-main-two">
-              <svg
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 19h16M4 5h16M4 12h16"></path>
               </svg>
               <span>Leçon</span>
             </Link>
             <Link to="/friends" className="flex items-center space-x-1 hover:text-main-two">
-              <svg
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path>
                 <circle cx="9" cy="7" r="4"></circle>
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -92,21 +64,14 @@ function Navbar() {
               <span>Amis</span>
             </Link>
             <Link to="/leaderboard" className="flex items-center space-x-1 hover:text-main-two">
-              <svg
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M8 21h8M12 17v4M7 3h10l1 7H6l1-7z"></path>
               </svg>
               <span>Classement</span>
             </Link>
           </div>
 
+          {/* Menu utilisateur */}
           <div className="flex items-center space-x-4">
             {user ? (
               <>
@@ -148,7 +113,53 @@ function Navbar() {
               </Link>
             )}
           </div>
+
+          {/* Bouton menu mobile */}
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-white">
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12h18M3 6h18M3 18h18"></path>
+            </svg>
+          </button>
         </div>
+
+        {/* Menu mobile */}
+        {isMenuOpen && (
+          <div className="md:hidden space-y-2 mt-4">
+            <Link to="/" className="flex items-center space-x-1 hover:text-main-two">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 12l2-2m0 0l7-7 7 7m-9 9v-6h4v6m5 0h-14"></path>
+              </svg>
+              <span>Accueil</span>
+            </Link>
+            <Link to="/quizzes" className="flex items-center space-x-1 hover:text-main-two">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+              <span>Quizz</span>
+            </Link>
+            <Link to="/lessons" className="flex items-center space-x-1 hover:text-main-two">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 19h16M4 5h16M4 12h16"></path>
+              </svg>
+              <span>Leçon</span>
+            </Link>
+            <Link to="/friends" className="flex items-center space-x-1 hover:text-main-two">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>Amis</span>
+            </Link>
+            <Link to="/leaderboard" className="flex items-center space-x-1 hover:text-main-two pb-4">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 21h8M12 17v4M7 3h10l1 7H6l1-7z"></path>
+              </svg>
+              <span>Classement</span>
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   );

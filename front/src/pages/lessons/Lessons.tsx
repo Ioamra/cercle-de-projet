@@ -13,8 +13,8 @@ function Lessons() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {lessons.map((lesson) => (
-          <div key={lesson.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-            <div className="p-6">
+          <div key={lesson.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full">
+            <div className="p-6 flex-grow">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">{lesson.title}</h3>
               <p className="text-gray-600 mb-4">{lesson.description}</p>
 
@@ -32,11 +32,12 @@ function Lessons() {
                   <span>Niveau : {lesson.level}</span>
                 </div>
               </div>
-
-              <Link to={`/lesson/${lesson.id}`} className="mt-4 block">
-                <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer la leçon</button>
-              </Link>
             </div>
+
+            {/* Lien et bouton positionnés en bas avec un espace (mt-4) */}
+            <Link to={`/lesson/${lesson.id}`} className="mt-auto p-6 pt-0">
+              <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer la leçon</button>
+            </Link>
           </div>
         ))}
       </div>
