@@ -8,7 +8,7 @@ export const login = async (email: string, password: string) => {
       password: CryptoJS.SHA256(password).toString(),
     });
     localStorage.setItem('token', response.data.token);
-    localStorage.setItem('user', response.data.user);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
     return 'ok';
   } catch (error) {
     return { error };

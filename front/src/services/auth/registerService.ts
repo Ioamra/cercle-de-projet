@@ -12,7 +12,7 @@ export const register = async (email: string, pseudo: string, first_name: string
       id_avatar,
     });
     localStorage.setItem('token', response.data.token);
-    localStorage.setItem('user', response.data.user);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
     return 'ok';
   } catch (error) {
     return { error };
