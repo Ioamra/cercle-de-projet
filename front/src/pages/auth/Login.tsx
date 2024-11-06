@@ -22,7 +22,7 @@ function Login() {
       navigate('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to login');
+      setError(err.response?.data?.message || 'Échec de la connexion');
     } finally {
       setLoading(false);
     }
@@ -34,7 +34,7 @@ function Login() {
         <div className="flex items-center justify-center mb-8">
           {/* Remplace l'icône LogIn par un élément natif, par exemple un emoji */}
           <span className="h-8 w-8 text-green-600 mr-2">🔑</span>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Bienvenue</h1>
         </div>
 
         {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
@@ -49,37 +49,37 @@ function Login() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-main-four focus:border-main-four sm:text-sm"
               required
             />
           </div>
 
           <div className="mb-6">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
+            Mot de passe
             </label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-main-four focus:border-main-four sm:text-sm"
               required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-main-four hover:bg-main-five focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-main-four"
             disabled={loading}
           >
-            {loading ? 'Loading...' : 'Login'}
+            {loading ? 'Chargement...' : 'Se connecter'}
           </button>
         </form>
 
         <div className="mt-6 text-center">
-          <Link to="/register" className="text-sm text-green-600 hover:text-green-500">
-            Don't have an account? Sign up
+          <Link to="/register" className="text-sm text-main-four hover:text-main-five">
+            Vous n'avez pas de compte ? S'inscrire
           </Link>
         </div>
       </div>

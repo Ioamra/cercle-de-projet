@@ -19,37 +19,37 @@ function Footer() {
               </svg>
               <span className="font-bold text-xl">Kestrel</span>
             </div>
-            <p className="mt-2 text-sm text-orange-100">Learn, play, and make a difference for our planet.</p>
+            <p className="mt-2 text-sm text-orange-100">Apprendre, jouer et faire la différence pour notre planète. C'est avec nous que nous faisons du bien a la planète !</p>
           </div>
 
           <div className="flex flex-col items-center md:items-start">
-            <h3 className="font-semibold text-lg mb-2">Quick Links</h3>
+            <h3 className="font-semibold text-lg mb-2">Liens rapides</h3>
             <ul className="space-y-2 text-orange-100">
               <li>
                 <a href="/about" className="hover:text-white">
-                  About Us
+                À propos de nous
                 </a>
               </li>
               <li>
                 <a href="/contact" className="hover:text-white">
-                  Contact
+                  Nous contacter
                 </a>
               </li>
               <li>
                 <a href="/privacy" className="hover:text-white">
-                  Privacy Policy
+                Politique de confidentialité
                 </a>
               </li>
               <li>
                 <a href="/terms" className="hover:text-white">
-                  Terms of Service
+                Conditions d'utilisation
                 </a>
               </li>
             </ul>
           </div>
 
           <div className="flex flex-col items-center md:items-start">
-            <h3 className="font-semibold text-lg mb-2">Connect With Us</h3>
+            <h3 className="font-semibold text-lg mb-2">Connectez-vous avec nous</h3>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-orange-200">
                 <svg
@@ -84,7 +84,7 @@ function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t bg-main-four text-center text-sm text-orange-100">
-          <p>&copy; {new Date().getFullYear()} Kestrel. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Kestrel Tous droits réservés.</p>
         </div>
       </div>
     </footer>

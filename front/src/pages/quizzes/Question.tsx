@@ -21,7 +21,7 @@ function QuizQuestion() {
               key={answer.id}
               onClick={() => handleAnswerClick(answer.id)}
               className={`py-6 px-4 rounded-lg text-white text-xl font-semibold transition duration-200 ${
-                selectedAnswer === answer.id ? 'bg-green-500' : 'bg-blue-500 hover:bg-blue-600'
+                selectedAnswer === answer.id ? 'bg-main-four' : 'bg-blue-500 hover:bg-blue-600'
               }`}
             >
               {answer.text}

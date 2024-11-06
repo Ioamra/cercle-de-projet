@@ -17,7 +17,7 @@ function AdminDashboard() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-        <button className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+        <button className="flex items-center space-x-2 bg-main-four text-white px-4 py-2 rounded-lg hover:bg-main-five">
           <span className="h-5 w-5">⚙️</span>
           <span>Settings</span>
         </button>
@@ -29,7 +29,7 @@ function AdminDashboard() {
             <span className="h-6 w-6 text-green-600">👥</span>
             <h2 className="text-xl font-semibold">Total Users</h2>
           </div>
-          <p className="text-3xl font-bold text-green-600">1,234</p>
+          <p className="text-3xl font-bold text-main-four">1,234</p>
           <p className="text-sm text-gray-600 mt-1">+12% from last month</p>
         </div>
 
@@ -38,7 +38,7 @@ function AdminDashboard() {
             <span className="h-6 w-6 text-green-600">📖</span>
             <h2 className="text-xl font-semibold">Lessons</h2>
           </div>
-          <p className="text-3xl font-bold text-green-600">45</p>
+          <p className="text-3xl font-bold text-main-four">45</p>
           <p className="text-sm text-gray-600 mt-1">Active lessons</p>
         </div>
 
@@ -47,7 +47,7 @@ function AdminDashboard() {
             <span className="h-6 w-6 text-green-600">❓</span>
             <h2 className="text-xl font-semibold">Quizzes</h2>
           </div>
-          <p className="text-3xl font-bold text-green-600">128</p>
+          <p className="text-3xl font-bold text-main-four">128</p>
           <p className="text-sm text-gray-600 mt-1">Total quizzes</p>
         </div>
       </div>

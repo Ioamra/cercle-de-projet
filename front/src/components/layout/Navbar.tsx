@@ -103,7 +103,7 @@ function Navbar() {
               >
                 <path d="M8 21h8M12 17v4M7 3h10l1 7H6l1-7z"></path>
               </svg>
-              <span>Leaderboard</span>
+              <span>Classement</span>
             </Link>
           </div>
 

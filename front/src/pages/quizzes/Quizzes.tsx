@@ -6,8 +6,8 @@ function Quizzes() {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900">Environmental Quizzes</h1>
-        <p className="mt-2 text-gray-600">Challenge yourself and earn points!</p>
+        <h1 className="text-3xl font-bold text-gray-900">Quiz sur l'environnement</h1>
+        <p className="mt-2 text-gray-600">Relevez des défis et gagnez des points !</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -20,7 +20,7 @@ function Quizzes() {
               <div className="space-y-2">
                 <div className="flex items-center text-sm text-gray-500">
                   <span className="h-4 w-4 mr-2">🏆</span>
-                  <span>Difficulty: {quiz.difficulty}</span>
+                  <span>Difficulté: {quiz.difficulty}</span>
                 </div>
                 <div className="flex items-center text-sm text-gray-500">
                   <span className="h-4 w-4 mr-2">⏰</span>
@@ -32,7 +32,7 @@ function Quizzes() {
                 </div>
               </div>
 
-              <button className="mt-4 w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition">Start Quiz</button>
+              <button className="mt-4 w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer le Quizz</button>
             </div>
           </div>
         ))}
