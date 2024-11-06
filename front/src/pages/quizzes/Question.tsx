@@ -1,17 +1,10 @@
 import { useState } from 'react';
+import { getQuestions } from '../../services/questionService';
 
 function QuizQuestion() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
 
-  const question = {
-    content: 'Quelle est la capitale de la France ?',
-    answers: [
-      { id: 1, text: 'Berlin' },
-      { id: 2, text: 'Madrid' },
-      { id: 3, text: 'Paris' },
-      { id: 4, text: 'Rome' },
-    ],
-  };
+  const question = getQuestions();
 
   const handleAnswerClick = (answerId: number) => {
     setSelectedAnswer(answerId);
