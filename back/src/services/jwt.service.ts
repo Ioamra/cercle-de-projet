@@ -11,7 +11,7 @@ const generateToken = (user: UserJwtInfo): string => {
   return jwt.sign(user, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
-const getIdUtilisateurInToken = (token: string): Promise<number | null> => {
+const getIdUserAccountInToken = (token: string): Promise<number | null> => {
   return new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET as string, (err, user: any) => {
       if (err) {
@@ -23,4 +23,4 @@ const getIdUtilisateurInToken = (token: string): Promise<number | null> => {
   });
 };
 
-export { generateToken, getIdUtilisateurInToken };
+export { generateToken, getIdUserAccountInToken };
