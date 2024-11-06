@@ -22,7 +22,7 @@ const request = async (url: string, options: RequestInit) => {
 
 export const auth = {
   login: async (email: string, password: string) => {
-    const response = await request('/auth/login', {
+    const response = await request('/user-account/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,13 +31,13 @@ export const auth = {
     });
     return response;
   },
-  register: async (username: string, email: string, password: string) => {
-    const response = await request('/auth/register', {
+  register: async (email: string, pseudo: string, first_name: string, last_name: string, password: string, id_avatar: number) => {
+    const response = await request('/user-account/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ email, pseudo, first_name, last_name, password, id_avatar }),
     });
     return response;
   },

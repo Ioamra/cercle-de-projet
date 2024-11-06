@@ -5,7 +5,7 @@ import haveAdminToken from '../../middleware/haveAdminToken.middleware';
 const router = Router();
 
 router.post('/create', haveAdminToken, create);
-router.put('/update', haveAdminToken, update);
-router.delete('/remove', haveAdminToken, remove);
+router.put('/update/:id', haveAdminToken, update);
+router.delete('/remove/:id', haveAdminToken, remove);
 
 export default router;
