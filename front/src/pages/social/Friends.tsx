@@ -6,8 +6,13 @@ function Friends() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="flex justify-between items-center">
+<<<<<<< HEAD
         <h1 className="text-3xl font-bold text-gray-900">Amis</h1>
         <button className="flex items-center space-x-2 bg-main-four text-white px-4 py-2 rounded-lg hover:bg-main-five">
+=======
+        <h1 className="text-3xl font-bold text-gray-900">Friends</h1>
+        <button className="flex items-center space-x-2 bg-main-four text-white px-4 py-2 rounded-lg hover:bg-main-four">
+>>>>>>> main
           <span className="h-5 w-5">➕</span>
           <span>Ajouter un ami</span>
         </button>

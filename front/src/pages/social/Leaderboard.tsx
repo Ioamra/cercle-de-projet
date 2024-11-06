@@ -19,7 +19,11 @@ function Leaderboard() {
               {user.rank === 3 && <span className="h-12 w-12 text-orange-400 text-6xl">🥉</span>}
             </div>
             <h3 className="text-xl font-semibold text-gray-900">{user.username}</h3>
+<<<<<<< HEAD
             <p className="text-main-four font-bold text-2xl mt-2">{user.points}</p>
+=======
+            <p className="text-main-five font-bold text-2xl mt-2">{user.points}</p>
+>>>>>>> main
             <p className="text-sm text-gray-600 mt-1">points</p>
           </div>
         ))}
@@ -40,7 +44,11 @@ function Leaderboard() {
                           ? 'bg-gray-100 text-gray-600'
                           : user.rank === 3
                             ? 'bg-orange-100 text-orange-600'
+<<<<<<< HEAD
                             : 'bg-green-100 text-main-four'
+=======
+                            : 'bg-green-100 text-main-five'
+>>>>>>> main
                     }`}
                   >
                     {user.rank}
@@ -48,7 +56,11 @@ function Leaderboard() {
                   <span className="font-medium text-gray-900">{user.username}</span>
                 </div>
                 <div className="text-right">
+<<<<<<< HEAD
                   <p className="font-semibold text-main-four">{user.points}</p>
+=======
+                  <p className="font-semibold text-main-five">{user.points}</p>
+>>>>>>> main
                   <p className="text-sm text-gray-600">points</p>
                 </div>
               </div>

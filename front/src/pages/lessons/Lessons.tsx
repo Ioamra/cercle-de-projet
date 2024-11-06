@@ -34,7 +34,11 @@ function Lessons() {
               </div>
 
               <Link to={`/lesson/${lesson.id}`} className="mt-4 block">
+<<<<<<< HEAD
                 <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer la leçon</button>
+=======
+                <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Start Lesson</button>
+>>>>>>> main
               </Link>
             </div>
           </div>
