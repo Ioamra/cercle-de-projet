@@ -32,7 +32,7 @@ function Quizzes() {
                 </div>
               </div>
 
-              <button className="mt-4 w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition">Start Quiz</button>
+              <button className="mt-4 w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Start Quiz</button>
             </div>
           </div>
         ))}
