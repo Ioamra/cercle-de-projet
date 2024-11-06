@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../../lib/api';
 import { useAuth } from '../../lib/store';
+import { register } from '../../services/auth/registerService';
 
 function Register() {
   const [pseudo, setPseudo] = useState('');
@@ -28,7 +28,7 @@ function Register() {
     setLoading(true);
 
     try {
-      const { token, user } = await auth.register(email, pseudo, firstName, lastName, password, idAvatar);
+      const { token, user } = await register(email, pseudo, firstName, lastName, password, idAvatar);
       dispatch({ type: 'SET_AUTH', payload: { token, user } });
       navigate('/');
     } catch (err: any) {
