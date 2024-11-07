@@ -10,7 +10,6 @@ import adminUserAccountRoutes from './routes/admin/admin_user_account.routes';
 import avatarRoutes from './routes/avatar.routes';
 import lessonRoutes from './routes/lesson.routes';
 import quizRoutes from './routes/quiz.routes';
-import quizResultRoutes from './routes/quiz_result.routes';
 import userAccountRoutes from './routes/user_account.routes';
 
 dotenv.config();
@@ -27,7 +26,6 @@ app.use('/api/img', express.static(path.join(__dirname, 'upload')));
 // Routes
 app.use('/api/avatar', avatarRoutes);
 app.use('/api/lesson', lessonRoutes);
-app.use('/api/quiz-result', quizResultRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/user-account', userAccountRoutes);
 // Admin Routes
