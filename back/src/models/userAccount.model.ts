@@ -25,13 +25,15 @@ export declare module UserAccount {
   }
 
   interface IUserAccountWithRecentActivity extends IUserAccount {
-    recent_activity: {
-      id_quiz: number;
-      id_quiz_result: number;
-      title: string;
-      difficulty: string;
-      creation_date: string;
-      note: number;
-    };
+    recent_activity: IRecentActivity[];
+  }
+
+  interface IRecentActivity {
+    id_quiz: number;
+    id_quiz_result: number;
+    title: string;
+    difficulty: string;
+    creation_date: string;
+    note: number;
   }
 }
