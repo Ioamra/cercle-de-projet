@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
-import { checkExpiration } from '../../services/expirationService';
+import { checkExpiration } from '../../services/expiration.service';
 
 function Navbar() {
   // Check expiration

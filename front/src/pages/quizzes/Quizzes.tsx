@@ -1,27 +1,33 @@
 import { useEffect, useState } from 'react';
-import { getQuizzes } from '../../services/quizzService';
-
-type QuizWithoutDetail = {
-  id: number;
-  title: string;
-  description: string;
-  time_in_min: number;
-  difficulty: string;
-  avg_note: number;
-  play_count: number;
-};
+import loadingGif from '../../assets/loading.webp';
+import { Quiz } from '../../models/quiz.model';
+import { getQuizzes } from '../../services/quizzes/quizzes.service';
 
 function Quizzes() {
-  const [quizzes, setQuizzes] = useState<QuizWithoutDetail[]>([]);
+  const [quizzes, setQuizzes] = useState<Quiz.IQuizWithoutDetail[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchQuizzes() {
-      const data = await getQuizzes();
-      setQuizzes(data);
+      try {
+        const quizzesData = await getQuizzes();
+        setQuizzes(quizzesData);
+      } catch (error) {
+        console.error('Error fetching lessons:', error);
+      } finally {
+        setLoading(false);
+      }
     }
-
     fetchQuizzes();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img className="w-1/3" src={loadingGif} alt="Loading..." />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

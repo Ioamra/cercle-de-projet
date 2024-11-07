@@ -125,45 +125,6 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Use
   }
 };
 
-export const findAllFriend = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccount[]>> => {
-  try {
-    const id = getIdUserAccountInToken(req.headers.authorization!);
-
-    const { rows } = await pool.query(
-      `
-      SELECT
-        user_account.id,
-        user_account.pseudo,
-        user_account.email,
-        user_account.first_name,
-        user_account.last_name,
-        'localhost:3000/api/img/' || avatar.img AS avatar,
-        AVG(quiz_result.note)*10 AS avg_note,
-        COUNT(quiz_result.note) AS nb_quiz_make,
-        SUM(quiz_result.note)*10 AS total_note
-      FROM user_account
-      INNER JOIN avatar ON user_account.id_avatar = avatar.id
-      LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
-      WHERE user_account.id IN (
-        SELECT user_account_has_friend.id_friend
-        FROM user_account_has_friend
-        WHERE user_account_has_friend.id_user_account = $1
-        UNION
-        SELECT user_account_has_friend.id_user_account
-        FROM user_account_has_friend
-        WHERE user_account_has_friend.id_friend = $1
-      )
-      GROUP BY user_account.id, avatar.img;
-      `,
-      [id],
-    );
-    return res.status(200).json(rows);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
-};
-
 export const search = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccount[]>> => {
   try {
     const search = parseInt(req.params.search);

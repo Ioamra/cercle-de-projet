@@ -1,18 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import loadingGif from '../../assets/loading.webp'; // Adjust the path as necessary
-import { getLessons } from '../../services/lessonsService';
-
-type LessonWithoutDetail = {
-  id: number;
-  title: string;
-  description: string;
-  time_in_min: string;
-  difficulty: string;
-};
+import { Lesson } from '../../models/lesson.model';
+import { getLessons } from '../../services/lessons/lessons.service';
 
 function Lessons() {
-  const [lessons, setLessons] = useState<LessonWithoutDetail[]>([]);
+  const [lessons, setLessons] = useState<Lesson.ILessonWithoutDetail[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
