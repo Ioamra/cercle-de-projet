@@ -12,7 +12,7 @@ type User = {
   role: string;
 };
 
-const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -47,7 +47,7 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response) => {
   try {
     const { email, pseudo, first_name, last_name, password, id_avatar } = req.body;
 
@@ -91,7 +91,7 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
-const findOne = async (req: Request, res: Response) => {
+export const findOne = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
     const { rows } = await pool.query(
@@ -124,7 +124,7 @@ const findOne = async (req: Request, res: Response) => {
   }
 };
 
-const findAllFriend = async (req: Request, res: Response) => {
+export const findAllFriend = async (req: Request, res: Response) => {
   try {
     const id = getIdUserAccountInToken(req.headers.authorization!);
 
@@ -163,7 +163,7 @@ const findAllFriend = async (req: Request, res: Response) => {
   }
 };
 
-const findLeaderboard = async (req: Request, res: Response) => {
+export const findLeaderboard = async (req: Request, res: Response) => {
   try {
     const order = req.params.order;
     if (order != 'avg_note' && order != 'nb_quiz_make' && order != 'total_note') {
@@ -195,7 +195,7 @@ const findLeaderboard = async (req: Request, res: Response) => {
   }
 };
 
-const findFriendLeaderboard = async (req: Request, res: Response) => {
+export const findFriendLeaderboard = async (req: Request, res: Response) => {
   try {
     const id = getIdUserAccountInToken(req.headers.authorization!);
     const order = req.params.order;
@@ -237,7 +237,7 @@ const findFriendLeaderboard = async (req: Request, res: Response) => {
   }
 };
 
-const friendRequest = async (req: Request, res: Response) => {
+export const friendRequest = async (req: Request, res: Response) => {
   try {
     const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
     const id = parseInt(req.params.id);
@@ -250,7 +250,7 @@ const friendRequest = async (req: Request, res: Response) => {
   }
 };
 
-const acceptFriend = async (req: Request, res: Response) => {
+export const acceptFriend = async (req: Request, res: Response) => {
   try {
     const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
     const { id } = req.body;
@@ -262,5 +262,3 @@ const acceptFriend = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
-
-export { acceptFriend, findAllFriend, findFriendLeaderboard, findLeaderboard, findOne, friendRequest, login, register };

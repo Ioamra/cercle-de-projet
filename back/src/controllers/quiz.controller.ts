@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import pool from '../config/db.config';
+import { getIdUserAccountInToken } from '../services/jwt.service';
 
 type QuizWithoutDetail = {
   id: number;
@@ -89,6 +90,42 @@ export const findOne = async (req: Request, res: Response) => {
     );
 
     res.status(201).json(rows);
+  } catch (error) {
+    console.error('Error :' + error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+type QuestionResult = {
+  id_question: number;
+  id_response: number;
+  is_correct: boolean;
+};
+
+export const addQuizResult = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+    const data: QuestionResult[] = req.body;
+    const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
+
+    const nbAnswer = data.length;
+    const nbCorrectAnswer = data.filter((result) => result.is_correct).length;
+
+    const { rows } = await pool.query('INSERT INTO quiz_result (note, id_quiz, id_user_account) VALUES ($1, $2, $3) RETURNING id', [
+      Math.round((nbCorrectAnswer / nbAnswer) * 100) / 100,
+      id,
+      idInitiator,
+    ]);
+    const id_quiz_result = rows[0].id;
+
+    for (let i = 0; i < data.length; i++) {
+      await pool.query('INSERT INTO user_response (id_quiz_result, id_question, id_response) VALUES ($1, $2, $3)', [
+        id_quiz_result,
+        data[i].id_question,
+        data[i].id_response,
+      ]);
+    }
+    res.status(201).json({ message: 'quiz as been added' });
   } catch (error) {
     console.error('Error :' + error);
     res.status(500).json({ message: 'Internal server error' });
