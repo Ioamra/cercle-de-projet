@@ -38,7 +38,7 @@ export async function getLessons(): Promise<LessonWithoutDetail[]> {
   }
 }
 
-export async function getLesson(id: number): Promise<Lesson[]> {
+export async function getLesson(id: number): Promise<Lesson> {
   try {
     const response = await apiServiceWithoutToken.get('/lesson/' + id);
     return response.data;

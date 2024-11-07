@@ -35,14 +35,14 @@ function Lesson() {
   const { id } = useParams<{ id: string }>();
   if (!id) return;
 
-  const [lessons, setLessons] = useState<LessonType[]>([]);
+  const [lesson, setLesson] = useState<LessonType>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchLessons() {
       try {
         const lessonsData = await getLesson(+id!);
-        setLessons(lessonsData);
+        setLesson(lessonsData);
       } catch (error) {
         console.error('Error fetching lessons:', error);
       } finally {
@@ -52,8 +52,6 @@ function Lesson() {
 
     fetchLessons();
   }, []);
-
-  const lesson = lessons[0];
 
   if (loading) {
     return (
@@ -83,7 +81,7 @@ function Lesson() {
         ))}
       </div>
 
-      {lesson?.similary_lessons.length > 0 && (
+      {lesson && lesson.similary_lessons.length > 0 && (
         <>
           <h2 className="text-2xl font-bold text-gray-900">Leçons similaires</h2>
           <div className="align-middle items-center justify-center">
@@ -107,7 +105,7 @@ function Lesson() {
         </>
       )}
 
-      {lesson?.similary_quizes.length > 0 && (
+      {lesson && lesson.similary_quizes.length > 0 && (
         <>
           <h2 className="mt-2 text-2xl font-bold text-gray-900">Quiz similaires</h2>
           <div className="mb-7 align-middle items-center justify-center">
