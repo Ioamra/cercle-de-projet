@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../../assets/logo.svg';
 import { checkExpiration } from '../../services/expirationService';
 
 function Navbar() {
@@ -22,18 +23,7 @@ function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo et titre */}
           <Link to="/" className="flex items-center space-x-2">
-            <svg
-              className="h-8 w-8"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
-              <path d="M12 6v6l4 2"></path>
-            </svg>
+            <img src={logo} alt="Logo" className="h-8 w-8" />
             <span className="font-bold text-xl">Kestrel</span>
           </Link>
 
