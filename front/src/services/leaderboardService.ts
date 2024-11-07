@@ -1,4 +1,5 @@
 const leaderboard = [
+  
   { id: 1, username: 'EcoMaster', points: 2500, rank: 1 },
   { id: 2, username: 'GreenHero', points: 2200, rank: 2 },
   { id: 3, username: 'EarthGuardian', points: 2000, rank: 3 },
