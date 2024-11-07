@@ -25,11 +25,11 @@ function Lessons() {
                 </div>
                 <div className="flex items-center text-sm text-gray-500">
                   <span className="h-4 w-4 mr-2">⏰</span>
-                  <span>{lesson.duration}</span>
+                  <span>{lesson.time_in_min} mins</span>
                 </div>
                 <div className="flex items-center text-sm text-gray-500">
                   <span className="h-4 w-4 mr-2">📖</span>
-                  <span>Niveau : {lesson.level}</span>
+                  <span>Niveau : {lesson.difficulty}</span>
                 </div>
               </div>
             </div>
