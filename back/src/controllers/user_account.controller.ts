@@ -94,7 +94,7 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Use
         user_account.first_name,
         user_account.last_name,
         'localhost:3000/api/img/' || avatar.img AS avatar,
-        AVG(quiz_result.note) AS avg_note,
+        AVG(quiz_result.note)*10 AS avg_note,
         COUNT(quiz_result.note) AS nb_quiz_make,
         SUM(quiz_result.note)*10 AS total_note,
         ARRAY_AGG(JSON_BUILD_OBJECT(
@@ -138,7 +138,7 @@ export const findAllFriend = async (req: Request, res: Response): Promise<Respon
         user_account.first_name,
         user_account.last_name,
         'localhost:3000/api/img/' || avatar.img AS avatar,
-        AVG(quiz_result.note) AS avg_note,
+        AVG(quiz_result.note)*10 AS avg_note,
         COUNT(quiz_result.note) AS nb_quiz_make,
         SUM(quiz_result.note)*10 AS total_note
       FROM user_account
@@ -176,7 +176,7 @@ export const search = async (req: Request, res: Response): Promise<Response<User
         user_account.first_name,
         user_account.last_name,
         'localhost:3000/api/img/' || avatar.img AS avatar,
-        AVG(quiz_result.note) AS avg_note,
+        AVG(quiz_result.note)*10 AS avg_note,
         COUNT(quiz_result.note) AS nb_quiz_make,
         SUM(quiz_result.note)*10 AS total_note
       FROM user_account
@@ -209,7 +209,7 @@ export const findLeaderboard = async (req: Request, res: Response): Promise<Resp
         user_account.first_name,
         user_account.last_name,
         'localhost:3000/api/img/' || avatar.img AS avatar,
-        AVG(quiz_result.note) AS avg_note,
+        AVG(quiz_result.note)*10 AS avg_note,
         COUNT(quiz_result.note) AS nb_quiz_make,
         SUM(quiz_result.note)*10 AS total_note
       FROM user_account
@@ -243,7 +243,7 @@ export const findFriendLeaderboard = async (req: Request, res: Response): Promis
         user_account.first_name,
         user_account.last_name,
         'localhost:3000/api/img/' || avatar.img AS avatar,
-        AVG(quiz_result.note) AS avg_note,
+        AVG(quiz_result.note)*10 AS avg_note,
         COUNT(quiz_result.note) AS nb_quiz_make,
         SUM(quiz_result.note)*10 AS total_note
       FROM user_account
