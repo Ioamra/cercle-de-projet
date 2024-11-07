@@ -31,7 +31,6 @@ function Quiz() {
     async function fetchQuiz() {
       try {
         const quizData = await getQuiz(+id!);
-        console.log(quizData);
         if (quizData.questions && quizData.questions.length > 0) {
           setQuiz(quizData);
           setQuestions(quizData.questions);
@@ -44,6 +43,15 @@ function Quiz() {
     }
     fetchQuiz();
   }, [id]);
+
+  // Si l'utilisateur n'a pas connecté (localstorage user vide), marquer un message d'erreur
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      alert('Vous devez être connecté pour accéder à ce quiz.');
+      navigate('/login');
+    }
+  }, [navigate]);
 
   if (loading) {
     return (

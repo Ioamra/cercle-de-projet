@@ -1,3 +1,5 @@
+import logo from '../../assets/logo.svg';
+
 function Footer() {
   return (
     <footer className="bg-main-four text-white">
@@ -5,21 +7,12 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center space-x-2">
-              <svg
-                className="h-6 w-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
-                <path d="M12 6v6l4 2"></path>
-              </svg>
+              <img src={logo} alt="Logo" className="h-8 w-8" />
               <span className="font-bold text-xl">Kestrel</span>
             </div>
-            <p className="mt-2 text-sm text-orange-100">Apprendre, jouer et faire la différence pour notre planète. C'est avec nous que nous faisons du bien a la planète !</p>
+            <p className="mt-2 text-sm text-orange-100">
+              Apprendre, jouer et faire la différence pour notre planète. C'est avec nous que nous faisons du bien a la planète !
+            </p>
           </div>
 
           <div className="flex flex-col items-center md:items-start">
@@ -27,7 +20,7 @@ function Footer() {
             <ul className="space-y-2 text-orange-100">
               <li>
                 <a href="/about" className="hover:text-white">
-                À propos de nous
+                  À propos de nous
                 </a>
               </li>
               <li>
@@ -37,12 +30,12 @@ function Footer() {
               </li>
               <li>
                 <a href="/privacy" className="hover:text-white">
-                Politique de confidentialité
+                  Politique de confidentialité
                 </a>
               </li>
               <li>
                 <a href="/terms" className="hover:text-white">
-                Conditions d'utilisation
+                  Conditions d'utilisation
                 </a>
               </li>
             </ul>
