@@ -11,6 +11,7 @@ import Register from './pages/auth/Register';
 import Lesson from './pages/lessons/Lesson';
 import Lessons from './pages/lessons/Lessons';
 import Profile from './pages/profile/Profile';
+import QuizPage from './pages/quizzes/QuizPage'; // Assurez-vous que le chemin d'import est correct
 import Quizzes from './pages/quizzes/Quizzes';
 import Friends from './pages/social/Friends';
 import Leaderboard from './pages/social/Leaderboard';
@@ -26,7 +27,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/quizzes" element={<Quizzes />} />
-            {/* <Route path="/quiz/:id" element={<Quizz />} /> */}
+            <Route path="/quiz/:id" element={<QuizPage />} /> {/* Route pour le quiz */}
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/lesson/:id" element={<Lesson />} />
             <Route path="/profile" element={<Profile />} />

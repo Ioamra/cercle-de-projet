@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import { getQuizzes } from '../../services/quizzService';
 
 function Quizzes() {
+  const navigate = useNavigate();
   const quizzes = getQuizzes();
 
   return (
@@ -33,8 +35,13 @@ function Quizzes() {
               </div>
             </div>
 
-              <button className="mt-4 w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer le Quizz</button>
-            </div>
+            <button
+              className="mt-4 w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition"
+              onClick={() => navigate(`/quiz/${quiz.id}`)}
+            >
+              Commencer le Quizz
+            </button>
+          </div>
         ))}
       </div>
     </div>
