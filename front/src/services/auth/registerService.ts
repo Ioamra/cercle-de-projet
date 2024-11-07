@@ -13,6 +13,7 @@ export const register = async (email: string, pseudo: string, first_name: string
     });
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('user', JSON.stringify(response.data.user));
+    localStorage.setItem('date_of_connection', new Date().toISOString());
     return 'ok';
   } catch (error) {
     return { error };
