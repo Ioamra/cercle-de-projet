@@ -1,8 +1,37 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getLessons } from '../../services/lessonsService';
 
+type LessonWithoutDetail = {
+  id: number;
+  title: string;
+  description: string;
+  time_in_min: string;
+  difficulty: string;
+};
+
 function Lessons() {
-  const lessons = getLessons();
+  const [lessons, setLessons] = useState<LessonWithoutDetail[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchLessons() {
+      try {
+        const lessonsData = await getLessons();
+        setLessons(lessonsData);
+      } catch (error) {
+        console.error('Error fetching lessons:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLessons();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="space-y-8">
@@ -20,10 +49,6 @@ function Lessons() {
 
               <div className="space-y-2">
                 <div className="flex items-center text-sm text-gray-500">
-                  <span className="h-4 w-4 mr-2">🏷️</span>
-                  <span>{lesson.category}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-500">
                   <span className="h-4 w-4 mr-2">⏰</span>
                   <span>{lesson.time_in_min} mins</span>
                 </div>
@@ -34,7 +59,6 @@ function Lessons() {
               </div>
             </div>
 
-            {/* Lien et bouton positionnés en bas avec un espace (mt-4) */}
             <Link to={`/lesson/${lesson.id}`} className="mt-auto p-6 pt-0">
               <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer la leçon</button>
             </Link>

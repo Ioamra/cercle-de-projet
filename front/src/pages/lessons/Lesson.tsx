@@ -1,11 +1,62 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getLessons } from '../../services/lessonsService';
+import { getLesson } from '../../services/lessonsService';
+
+type LessonWithoutDetail = {
+  id: number;
+  title: string;
+  description: string;
+  time_in_min: string;
+  difficulty: string;
+};
+
+type QuizWithoutDetail = {
+  id: number;
+  title: string;
+  description: string;
+  time_in_min: string;
+  difficulty: string;
+};
+
+type LessonType = {
+  id: number;
+  title: string;
+  content: string;
+  img: string;
+  video: string;
+  time_in_min: string;
+  difficulty: string;
+  similary_lessons: LessonWithoutDetail[];
+  similary_quizes: QuizWithoutDetail[];
+};
 
 function Lesson() {
   const { id } = useParams<{ id: string }>();
-  const lessons = getLessons();
+  if (!id) return;
 
-  const lesson = id ? lessons.find((lesson) => lesson.id === parseInt(id)) : undefined;
+  const [lessons, setLessons] = useState<LessonType[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchLessons() {
+      try {
+        const lessonsData = await getLesson(+id!);
+        setLessons(lessonsData);
+      } catch (error) {
+        console.error('Error fetching lessons:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLessons();
+  }, []);
+
+  const lesson = lessons[0];
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col align-middle items-center justify-center max-w-4xl mx-auto space-y-6">
