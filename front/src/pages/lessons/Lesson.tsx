@@ -82,39 +82,49 @@ function Lesson() {
           </p>
         ))}
       </div>
+
       {lesson?.similary_lessons.length > 0 && (
         <>
           <h2 className="text-2xl font-bold text-gray-900">Leçons similaires</h2>
           <div className="align-middle items-center justify-center">
             <div className="gap-6 flex flex-row">
               {lesson.similary_lessons.map((similaryLesson) => (
-                <div key={similaryLesson.id} className="flex flex-col justify-around w-72 p-4 border rounded-lg shadow-sm">
+                <a
+                  key={similaryLesson.id}
+                  href={`/lesson/${similaryLesson.id}`}
+                  className="flex flex-col gap-2 justify-between w-72 p-4 border rounded-lg shadow-sm hover:bg-gray-100"
+                >
                   <h3 className="text-xl font-semibold">{similaryLesson.title}</h3>
                   <p className="text-gray-600">{similaryLesson.description}</p>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500">{similaryLesson.time_in_min} minutes</span>
                     <span className="text-sm text-gray-500">Niveau : {similaryLesson.difficulty}</span>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
         </>
       )}
+
       {lesson?.similary_quizes.length > 0 && (
         <>
           <h2 className="mt-2 text-2xl font-bold text-gray-900">Quiz similaires</h2>
           <div className="mb-7 align-middle items-center justify-center">
             <div className="gap-6 flex flex-row">
               {lesson.similary_quizes.map((similaryQuiz) => (
-                <div key={similaryQuiz.id} className="flex flex-col w-72 p-4 border justify-around rounded-lg shadow-sm">
+                <a
+                  key={similaryQuiz.id}
+                  href={`/quizzes/${similaryQuiz.id}`}
+                  className="flex flex-col gap-2 w-72 p-4 border justify-between rounded-lg shadow-sm hover:bg-gray-100"
+                >
                   <h3 className="text-xl font-semibold">{similaryQuiz.title}</h3>
                   <p className="text-gray-600">{similaryQuiz.description}</p>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500">{similaryQuiz.time_in_min} minutes</span>
                     <span className="text-sm text-gray-500">Niveau : {similaryQuiz.difficulty}</span>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
