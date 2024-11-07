@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { findAll } from '../controllers/lesson.controller';
+import { findAll } from '../controllers/avatar.controller';
 
 const router = Router();
 

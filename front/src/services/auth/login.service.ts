@@ -1,15 +1,11 @@
 import CryptoJS from 'crypto-js';
-import { apiServiceWithoutToken } from '../requestService';
+import { apiServiceWithoutToken } from '../request.service';
 
-export const register = async (email: string, pseudo: string, first_name: string, last_name: string, password: string, id_avatar: number) => {
+export const login = async (email: string, password: string) => {
   try {
-    const response = await apiServiceWithoutToken.post('/user-account/register', {
-      email,
-      pseudo,
-      first_name,
-      last_name,
+    const response = await apiServiceWithoutToken.post('/user-account/login', {
+      email: email,
       password: CryptoJS.SHA256(password).toString(),
-      id_avatar,
     });
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('user', JSON.stringify(response.data.user));

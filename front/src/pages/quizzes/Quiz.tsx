@@ -1,19 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import loadingGif from '../../assets/loading.webp';
-import { getQuiz } from '../../services/quizzService';
-
-type QuizQuestion = {
-  id: number;
-  content: string;
-  responses: QuizResponse[];
-};
-
-type QuizResponse = {
-  id: number;
-  content: string;
-  is_correct: boolean;
-};
+import { Quiz as QuizModel } from '../../models/quiz.model';
+import { getQuiz } from '../../services/quizzes/quiz.service';
 
 function Quiz() {
   const { id } = useParams<{ id: string }>();
@@ -21,8 +10,8 @@ function Quiz() {
 
   const navigate = useNavigate();
 
-  const [quiz, setQuiz] = useState<any>(null);
-  const [questions, setQuestions] = useState<QuizQuestion[] | null>(null);
+  const [quiz, setQuiz] = useState<QuizModel.IQuiz | null>(null);
+  const [questions, setQuestions] = useState<QuizModel.IQuizQuestion[] | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -90,7 +79,7 @@ function Quiz() {
     }
   };
 
-  const currentQuestion = questions[currentQuestionIndex] as QuizQuestion;
+  const currentQuestion = questions[currentQuestionIndex] as QuizModel.IQuizQuestion;
 
   return (
     <div className="min-h-fit flex flex-col justify-center items-center">

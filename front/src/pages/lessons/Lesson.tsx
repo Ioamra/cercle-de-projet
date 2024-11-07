@@ -1,41 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import loadingGif from '../../assets/loading.webp'; // Assurez-vous que le chemin est correct
-import { getLesson } from '../../services/lessonsService';
-
-type LessonWithoutDetail = {
-  id: number;
-  title: string;
-  description: string;
-  time_in_min: string;
-  difficulty: string;
-};
-
-type QuizWithoutDetail = {
-  id: number;
-  title: string;
-  description: string;
-  time_in_min: string;
-  difficulty: string;
-};
-
-type LessonType = {
-  id: number;
-  title: string;
-  content: string;
-  img: string;
-  video: string;
-  time_in_min: string;
-  difficulty: string;
-  similary_lessons: LessonWithoutDetail[];
-  similary_quizes: QuizWithoutDetail[];
-};
+import loadingGif from '../../assets/loading.webp';
+import { Lesson as LessonModel } from '../../models/lesson.model';
+import { getLesson } from '../../services/lessons/lesson.service';
 
 function Lesson() {
   const { id } = useParams<{ id: string }>();
   if (!id) return;
 
-  const [lesson, setLesson] = useState<LessonType>();
+  const [lesson, setLesson] = useState<LessonModel.ILesson>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
