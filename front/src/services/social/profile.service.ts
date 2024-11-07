@@ -2,7 +2,7 @@ import { Avatar } from '../../models/avatar.model';
 import { UserAccount } from '../../models/userAccount.model';
 import { apiService, apiServiceWithoutToken } from '../request.service';
 
-export async function getOneUserAccount(id: number): Promise<UserAccount.IUserAccountWithRecentActivity[]> {
+export async function getOneUserAccount(id: number): Promise<UserAccount.IUserAccountWithRecentActivity> {
   try {
     const response = await apiServiceWithoutToken.get('/user-account/' + id);
     return response.data;

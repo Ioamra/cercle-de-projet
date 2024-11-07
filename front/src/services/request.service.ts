@@ -13,6 +13,6 @@ export const apiService = axios.create({
   baseURL: baseURL,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: sessionStorage.getItem('token'),
+    Authorization: localStorage.getItem('token'),
   },
 });

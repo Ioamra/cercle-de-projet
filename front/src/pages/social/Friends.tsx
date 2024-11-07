@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import loadingGif from '../../assets/loading.webp';
 import { UserAccount } from '../../models/userAccount.model';
 import { getFriendLeaderboard } from '../../services/social/friends.service';
+import { searchUserAccount } from '../../services/social/profile.service';
 
 function Friends() {
   const navigate = useNavigate();
 
-  const [searchResults, setSearchResults] = useState<{ id: number; username: string; points: number; status: string; lastActive: string }[]>([]);
+  const [searchResults, setSearchResults] = useState<UserAccount.IUserAccount[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const [friends, setFriends] = useState<UserAccount.IUserAccount[]>();
@@ -27,6 +28,24 @@ function Friends() {
     fetchFriends();
   }, []);
 
+  useEffect(() => {
+    if (!searchTerm) {
+      setSearchResults([]);
+      return;
+    }
+
+    async function fetchSearchResults() {
+      try {
+        const results = await searchUserAccount(searchTerm);
+        setSearchResults(results);
+      } catch (error) {
+        console.error('Error searching user accounts:', error);
+      }
+    }
+
+    fetchSearchResults();
+  }, [searchTerm]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -34,16 +53,6 @@ function Friends() {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (!searchTerm) {
-      setSearchResults([]);
-      return;
-    }
-
-    const results = friends!.filter((friend) => friend.pseudo.toLowerCase().includes(searchTerm.toLowerCase()));
-    // setSearchResults(results);
-  }, [searchTerm, friends]);
 
   const handleProfileClick = (id: number) => {
     navigate(`/profile/${id}`);
@@ -70,9 +79,9 @@ function Friends() {
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="text-right">
-                    <p className="text-sm text-gray-600">Points</p>
-                    <p className="font-semibold text-main-four">{friend.total_note}</p>
+                  <div className="text-right flex flex-row gap-2 items-center">
+                    <p className="font-semibold text-main-four">{friend.total_note || 0}</p>
+                    <p className="text-sm text-gray-600">points</p>
                   </div>
                   <button className="bg-main-four text-white px-4 py-2 rounded-lg" onClick={() => handleProfileClick(friend.id)}>
                     Voir le profil
@@ -103,20 +112,14 @@ function Friends() {
                         <span className="h-6 w-6 text-main-four">👥</span>
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">{friend.username}</h3>
-                        <div className="flex items-center space-x-2">
-                          <span className={`h-2 w-2 rounded-full ${friend.status === 'online' ? 'bg-green-500' : 'bg-gray-400'}`} />
-                          <span className="text-sm text-gray-600">
-                            {friend.status === 'online' ? 'Online' : `Dernièrement vu ${friend.lastActive}`}
-                          </span>
-                        </div>
+                        <h3 className="font-semibold text-gray-900">{friend.pseudo}</h3>
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-4">
-                      <div className="text-right">
-                        <p className="text-sm text-gray-600">Points</p>
-                        <p className="font-semibold text-main-four">{friend.points}</p>
+                      <div className="text-right gap-2 items-center flex flex-row ">
+                        <p className="font-semibold text-main-four">{friend.total_note || 0}</p>
+                        <p className="text-sm text-gray-600">points</p>
                       </div>
                       <button className="bg-main-four text-white px-4 py-2 rounded-lg" onClick={() => handleProfileClick(friend.id)}>
                         Voir le profil

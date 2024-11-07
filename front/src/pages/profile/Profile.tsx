@@ -1,8 +1,34 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { UserAccount } from '../../models/userAccount.model';
+import { getOneUserAccount } from '../../services/social/profile.service';
+
 function Profile() {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const { id } = useParams<{ id: string }>();
+  const [user, setUser] = useState<UserAccount.IUserAccountWithRecentActivity | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const userData = await getOneUserAccount(+id!);
+        setUser(userData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUser();
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!user) {
-    return null;
+    return <div>User not found</div>;
   }
 
   return (
@@ -14,7 +40,7 @@ function Profile() {
               <span className="h-8 w-8 text-green-600 text-2xl">👤</span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{user.username}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{user.pseudo}</h1>
               <p className="text-gray-600">{user.email}</p>
             </div>
           </div>
@@ -33,7 +59,7 @@ function Profile() {
             <span className="h-6 w-6 text-green-600 text-xl">🏆</span>
             <h2 className="text-xl font-semibold">Points</h2>
           </div>
-          <p className="text-3xl font-bold text-green-600">{user.points}</p>
+          <p className="text-3xl font-bold text-green-600">{user.total_note}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
@@ -41,38 +67,35 @@ function Profile() {
             <span className="h-6 w-6 text-green-600 text-xl">🏆</span>
             <h2 className="text-xl font-semibold">Note moyenne</h2>
           </div>
-          <p className="text-3xl font-bold text-main-four">12</p>
+          <p className="text-3xl font-bold text-main-four">{user.avg_note}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center space-x-3 mb-4">
             <span className="h-6 w-6 text-green-600 text-xl">🎖️</span>
-            <h2 className="text-xl font-semibold">Quizzes</h2>
+            <h2 className="text-xl font-semibold">Quiz</h2>
           </div>
-          <p className="text-3xl font-bold text-main-four">12</p>
-          <p className="text-sm text-gray-600 mt-1">Completed</p>
+          <p className="text-3xl font-bold text-main-four">{user.nb_quiz_make}</p>
+          <p className="text-sm text-gray-600 mt-1">Complété</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between py-2 border-b">
-            <div>
-              <p className="font-medium">Completed "Climate Change Basics" quiz</p>
-              <p className="text-sm text-gray-600">Score: 90/100</p>
-            </div>
-            <span className="text-sm text-gray-500">2 days ago</span>
-          </div>
-          <div className="flex items-center justify-between py-2 border-b">
-            <div>
-              <p className="font-medium">Finished "Waste Management" lesson</p>
-              <p className="text-sm text-gray-600">Earned 50 points</p>
-            </div>
-            <span className="text-sm text-gray-500">5 days ago</span>
+      {user.recent_activity.length > 0 && (
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold mb-4">Activité récente</h2>
+          <div className="space-y-4">
+            {user.recent_activity.map((activity) => (
+              <div key={activity.id_quiz_result} className="flex items-center justify-between py-2 border-b">
+                <div>
+                  <p className="font-medium">A completé le quiz : "{activity.title}"</p>
+                  <p className="text-sm text-gray-600">Score: {activity.note}/10</p>
+                </div>
+                <span className="text-sm text-gray-500">{activity.creation_date}</span>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -108,9 +108,9 @@ function Navbar() {
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <Link to="/profile" className="flex items-center space-x-1 hover:text-main-two">
+                <Link to={`/profile/${user.id}`} className="flex items-center space-x-1 hover:text-main-two">
                   <svg
-                    className="h-4 w-4"
+                    className="h-6 w-6"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
