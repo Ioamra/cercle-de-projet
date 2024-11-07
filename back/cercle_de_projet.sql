@@ -5,7 +5,7 @@
 -- Dumped from database version 16.1
 -- Dumped by pg_dump version 16.1
 
--- Started on 2024-11-07 09:20:15
+-- Started on 2024-11-07 09:30:15
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -146,7 +146,9 @@ ALTER SEQUENCE public.question_id_seq OWNED BY public.question.id;
 CREATE TABLE public.quiz (
     id integer NOT NULL,
     title text NOT NULL,
-    description text NOT NULL
+    description text NOT NULL,
+    time_in_min integer NOT NULL,
+    difficulty character varying NOT NULL
 );
 
 
@@ -480,8 +482,8 @@ INSERT INTO public.question VALUES (20, 'Quel est l''effet de la déforestation 
 -- Data for Name: quiz; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.quiz VALUES (1, 'Quizz Climat', 'Quizz Climat');
-INSERT INTO public.quiz VALUES (2, 'Quizz Océans', 'Quizz Océans');
+INSERT INTO public.quiz VALUES (1, 'Quizz Climat', 'Quizz Climat', 20, 'Intermédiaire');
+INSERT INTO public.quiz VALUES (2, 'Quizz Océans', 'Quizz Océans', 20, 'Intermédiaire');
 
 
 --
@@ -964,7 +966,7 @@ ALTER TABLE ONLY public.user_response
     ADD CONSTRAINT user_response_id_response_fkey FOREIGN KEY (id_response) REFERENCES public.response(id);
 
 
--- Completed on 2024-11-07 09:20:15
+-- Completed on 2024-11-07 09:30:15
 
 --
 -- PostgreSQL database dump complete
