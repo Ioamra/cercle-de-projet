@@ -1,7 +1,27 @@
+import { useEffect, useState } from 'react';
 import { getQuizzes } from '../../services/quizzService';
 
+type QuizWithoutDetail = {
+  id: number;
+  title: string;
+  description: string;
+  time_in_min: number;
+  difficulty: string;
+  avg_note: number;
+  play_count: number;
+};
+
 function Quizzes() {
-  const quizzes = getQuizzes();
+  const [quizzes, setQuizzes] = useState<QuizWithoutDetail[]>([]);
+
+  useEffect(() => {
+    async function fetchQuizzes() {
+      const data = await getQuizzes();
+      setQuizzes(data);
+    }
+
+    fetchQuizzes();
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -24,18 +44,19 @@ function Quizzes() {
                 </div>
                 <div className="flex items-center text-sm text-gray-500">
                   <span className="h-4 w-4 mr-2">⏰</span>
-                  <span>{quiz.timeEstimate}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <span className="h-4 w-4 mr-2">📊</span>
-                  <span>{quiz.points} points</span>
+                  <span>{quiz.time_in_min} minutes</span>
                 </div>
               </div>
             </div>
 
             {/* Espace en bas pour le bouton */}
             <div className="mt-4">
-              <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer le Quizz</button>
+              <a
+                href={`/quiz/${quiz.id}`}
+                className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition text-center block"
+              >
+                Commencer le Quizz
+              </a>
             </div>
           </div>
         ))}
