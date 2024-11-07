@@ -8,7 +8,7 @@ type Avatar = {
 
 export const findAll = async (req: Request, res: Response) => {
   try {
-    const { rows } = await pool.query<Avatar[]>('SELECT * FROM avatar');
+    const { rows } = await pool.query<Avatar[]>(`SELECT id, 'localhost:3000/api/img/' || img as img FROM avatar`);
 
     res.status(201).json(rows);
   } catch (error) {

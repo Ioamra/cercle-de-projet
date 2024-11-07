@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../../lib/api';
-import { useAuth } from '../../lib/store';
+import { login } from '../../services/auth/loginService';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -9,7 +8,6 @@ function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { dispatch } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,10 +15,11 @@ function Login() {
     setLoading(true);
 
     try {
-      const { token, user } = await auth.login(email, password);
-      dispatch({ type: 'SET_AUTH', payload: { token, user } });
-      navigate('/');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res = await login(email, password);
+      console.log(res);
+      if (res === 'ok') {
+        navigate('/');
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Échec de la connexion');
     } finally {
@@ -34,7 +33,7 @@ function Login() {
         <div className="flex items-center justify-center mb-8">
           {/* Remplace l'icône LogIn par un élément natif, par exemple un emoji */}
           <span className="h-8 w-8 text-green-600 mr-2">🔑</span>
-          <h1 className="text-2xl font-bold text-gray-900">Bienvenue</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Se connecter</h1>
         </div>
 
         {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
@@ -56,7 +55,7 @@ function Login() {
 
           <div className="mb-6">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Mot de passe
+              Mot de passe
             </label>
             <input
               type="password"
@@ -70,7 +69,7 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-main-four hover:bg-main-five focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-main-four"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-main-four hover:bg-main-five focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-main-five"
             disabled={loading}
           >
             {loading ? 'Chargement...' : 'Se connecter'}
@@ -79,7 +78,7 @@ function Login() {
 
         <div className="mt-6 text-center">
           <Link to="/register" className="text-sm text-main-four hover:text-main-five">
-            Vous n'avez pas de compte ? S'inscrire
+            Vous n'avez pas de compte? Créer un compte
           </Link>
         </div>
       </div>

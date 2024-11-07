@@ -1,8 +1,5 @@
-import { useAuth } from '../../lib/store';
-
 function AdminDashboard() {
-  const { state } = useAuth();
-  const { user } = state;
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   if (!user || user.role !== 'admin') {
     return (
