@@ -15,6 +15,7 @@ const router = Router();
 
 router.get('/', haveToken, findAllFriend);
 router.get('/:id', haveToken, findOne);
+router.get('/search/:search', findOne);
 router.get('/leaderboard/:order', findLeaderboard);
 router.get('/friend-leaderboard/:order', haveToken, findFriendLeaderboard);
 router.post('/register', register);

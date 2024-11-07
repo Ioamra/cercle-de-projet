@@ -1,28 +1,19 @@
 import { Request, Response } from 'express';
 import pool from '../config/db.config';
+import { UserAccount } from '../models/userAccount.model';
 import { generateToken, getIdUserAccountInToken } from '../services/jwt.service';
 
-type User = {
-  id: number;
-  email: string;
-  pseudo: string;
-  first_name: string;
-  last_name: string;
-  avatar: string;
-  role: string;
-};
-
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<Response<UserAccount.ILoginResponse>> => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
-    const query = `SELECT COUNT(*) as exist, user_account.id, role, email, pseudo, first_name, last_name, avatar.img AS avatar
+    const query = `SELECT COUNT(*) as exist, user_account.id, role, email, pseudo, first_name, last_name, 'localhost:3000/api/img/' || avatar.img AS avatar
     FROM user_account INNER JOIN avatar ON avatar.id = user_account.id_avatar WHERE email = $1 AND password = $2 GROUP BY user_account.id, avatar.img;`;
     const { rows } = await pool.query(query, [email, password]);
     if (rows[0].exist == 1) {
-      const user: User = {
+      const user = {
         id: rows[0].id,
         email: rows[0].email,
         pseudo: rows[0].pseudo,
@@ -47,7 +38,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response): Promise<Response<UserAccount.ILoginResponse>> => {
   try {
     const { email, pseudo, first_name, last_name, password, id_avatar } = req.body;
 
@@ -91,25 +82,35 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const findOne = async (req: Request, res: Response) => {
+export const findOne = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccountWithRecentActivity>> => {
   try {
     const id = parseInt(req.params.id);
     const { rows } = await pool.query(
       `
       SELECT
-        id,
-        pseudo,
-        last_name,
-        first_name,
-        email,
-        avatar.img,
-        AVG(quiz_result.note) AS note_best,
-        MAX(quiz_result.note) AS note_max,
-        MIN(quiz_result.note) AS note_min
+        user_account.id,
+        user_account.pseudo,
+        user_account.email,
+        user_account.first_name,
+        user_account.last_name,
+        'localhost:3000/api/img/' || avatar.img AS avatar,
+        AVG(quiz_result.note) AS avg_note,
+        COUNT(quiz_result.note) AS nb_quiz_make,
+        SUM(quiz_result.note)*10 AS total_note,
+        ARRAY_AGG(JSON_BUILD_OBJECT(
+          'id_quiz', quiz.id,
+          'id_quiz_result', quiz_result.id,
+          'title', quiz.title,
+          'difficulty', quiz.difficulty,
+          'creation_date', quiz_result.creation_date,
+          'note', quiz_result.note
+        )) AS recent_activity
       FROM user_account
       INNER JOIN avatar ON avatar.id = user_account.id_avatar
       LEFT JOIN quiz_result ON quiz_result.id_user_account = user_account.id
-      WHERE id = $1;
+      INNER JOIN quiz ON quiz.id = quiz_result.id_quiz
+      WHERE user_account.id = $1
+	    GROUP BY user_account.id, avatar.img;
     `,
       [id],
     );
@@ -124,7 +125,7 @@ export const findOne = async (req: Request, res: Response) => {
   }
 };
 
-export const findAllFriend = async (req: Request, res: Response) => {
+export const findAllFriend = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccount[]>> => {
   try {
     const id = getIdUserAccountInToken(req.headers.authorization!);
 
@@ -133,13 +134,13 @@ export const findAllFriend = async (req: Request, res: Response) => {
       SELECT
         user_account.id,
         user_account.pseudo,
-        user_account.last_name,
-        user_account.first_name,
         user_account.email,
-        avatar.img AS avatar,
-        AVG(quiz_result.note) AS note_best,
-        MAX(quiz_result.note) AS note_max,
-        MIN(quiz_result.note) AS note_min
+        user_account.first_name,
+        user_account.last_name,
+        'localhost:3000/api/img/' || avatar.img AS avatar,
+        AVG(quiz_result.note) AS avg_note,
+        COUNT(quiz_result.note) AS nb_quiz_make,
+        SUM(quiz_result.note)*10 AS total_note
       FROM user_account
       INNER JOIN avatar ON user_account.id_avatar = avatar.id
       LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
@@ -163,7 +164,37 @@ export const findAllFriend = async (req: Request, res: Response) => {
   }
 };
 
-export const findLeaderboard = async (req: Request, res: Response) => {
+export const search = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccount[]>> => {
+  try {
+    const search = parseInt(req.params.search);
+    const { rows } = await pool.query(
+      `
+      SELECT
+        user_account.id,
+        user_account.pseudo,
+        user_account.email,
+        user_account.first_name,
+        user_account.last_name,
+        'localhost:3000/api/img/' || avatar.img AS avatar,
+        AVG(quiz_result.note) AS avg_note,
+        COUNT(quiz_result.note) AS nb_quiz_make,
+        SUM(quiz_result.note)*10 AS total_note
+      FROM user_account
+      INNER JOIN avatar ON user_account.id_avatar = avatar.id
+      LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
+      WHERE pseudo LIKE $1
+      GROUP BY user_account.id, avatar.img;
+      `,
+      ['%' + search + '%'],
+    );
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const findLeaderboard = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccount[]>> => {
   try {
     const order = req.params.order;
     if (order != 'avg_note' && order != 'nb_quiz_make' && order != 'total_note') {
@@ -177,9 +208,10 @@ export const findLeaderboard = async (req: Request, res: Response) => {
         user_account.email,
         user_account.first_name,
         user_account.last_name,
+        'localhost:3000/api/img/' || avatar.img AS avatar,
         AVG(quiz_result.note) AS avg_note,
         COUNT(quiz_result.note) AS nb_quiz_make,
-        SUM(quiz_result.note) AS total_note
+        SUM(quiz_result.note)*10 AS total_note
       FROM user_account
       INNER JOIN avatar ON avatar.id = user_account.id_avatar
       LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
@@ -195,7 +227,7 @@ export const findLeaderboard = async (req: Request, res: Response) => {
   }
 };
 
-export const findFriendLeaderboard = async (req: Request, res: Response) => {
+export const findFriendLeaderboard = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccount[]>> => {
   try {
     const id = getIdUserAccountInToken(req.headers.authorization!);
     const order = req.params.order;
@@ -210,9 +242,10 @@ export const findFriendLeaderboard = async (req: Request, res: Response) => {
         user_account.email,
         user_account.first_name,
         user_account.last_name,
+        'localhost:3000/api/img/' || avatar.img AS avatar,
         AVG(quiz_result.note) AS avg_note,
         COUNT(quiz_result.note) AS nb_quiz_make,
-        SUM(quiz_result.note) AS total_note
+        SUM(quiz_result.note)*10 AS total_note
       FROM user_account
       INNER JOIN avatar ON avatar.id = user_account.id_avatar
       LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
@@ -237,7 +270,7 @@ export const findFriendLeaderboard = async (req: Request, res: Response) => {
   }
 };
 
-export const friendRequest = async (req: Request, res: Response) => {
+export const friendRequest = async (req: Request, res: Response): Promise<Response<{ message: string }>> => {
   try {
     const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
     const id = parseInt(req.params.id);
@@ -250,7 +283,7 @@ export const friendRequest = async (req: Request, res: Response) => {
   }
 };
 
-export const acceptFriend = async (req: Request, res: Response) => {
+export const acceptFriend = async (req: Request, res: Response): Promise<Response<{ message: string }>> => {
   try {
     const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
     const { id } = req.body;
