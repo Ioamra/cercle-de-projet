@@ -11,16 +11,13 @@ const generateToken = (user: UserJwtInfo): string => {
   return jwt.sign(user, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
-const getIdUserAccountInToken = (token: string): Promise<number | null> => {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_SECRET as string, (err, user: any) => {
-      if (err) {
-        reject(null);
-      } else {
-        resolve(user.id);
-      }
-    });
-  });
+const getIdUserAccountInToken = (token: string): number | null => {
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET as string) as any;
+    return user.id;
+  } catch (err) {
+    return null;
+  }
 };
 
 export { generateToken, getIdUserAccountInToken };
