@@ -97,14 +97,14 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Use
         AVG(quiz_result.note)*10 AS avg_note,
         COUNT(quiz_result.note) AS nb_quiz_make,
         SUM(quiz_result.note)*10 AS total_note,
-        ARRAY_AGG(JSON_BUILD_OBJECT(
+        COALESCE(ARRAY_AGG(JSON_BUILD_OBJECT(
           'id_quiz', quiz.id,
           'id_quiz_result', quiz_result.id,
           'title', quiz.title,
           'difficulty', quiz.difficulty,
           'creation_date', quiz_result.creation_date,
           'note', quiz_result.note
-        )) AS recent_activity
+        )) FILTER (WHERE quiz_result.id IS NOT NULL), '{}') AS recent_activity
       FROM user_account
       INNER JOIN avatar ON avatar.id = user_account.id_avatar
       LEFT JOIN quiz_result ON quiz_result.id_user_account = user_account.id
