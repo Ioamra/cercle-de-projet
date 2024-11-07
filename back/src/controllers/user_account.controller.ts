@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import pool from '../config/db.config';
-import { generateToken } from '../services/jwt.service';
+import { generateToken, getIdUserAccountInToken } from '../services/jwt.service';
 
 type User = {
   id: number;
@@ -94,8 +94,25 @@ const register = async (req: Request, res: Response) => {
 const findOne = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
-    const query = `SELECT * FROM user_account WHERE id = $1;`;
-    const { rows } = await pool.query(query, [id]);
+    const { rows } = await pool.query(
+      `
+      SELECT
+        id,
+        pseudo,
+        last_name,
+        first_name,
+        email,
+        avatar.img,
+        AVG(quiz_result.note) AS note_best,
+        MAX(quiz_result.note) AS note_max,
+        MIN(quiz_result.note) AS note_min
+      FROM user_account
+      INNER JOIN avatar ON avatar.id = user_account.id_avatar
+      LEFT JOIN quiz_result ON quiz_result.id_user_account = user_account.id
+      WHERE id = $1;
+    `,
+      [id],
+    );
     if (rows.length) {
       return res.status(200).json(rows[0]);
     } else {
@@ -107,4 +124,143 @@ const findOne = async (req: Request, res: Response) => {
   }
 };
 
-export { findOne, login, register };
+const findAllFriend = async (req: Request, res: Response) => {
+  try {
+    const id = getIdUserAccountInToken(req.headers.authorization!);
+
+    const { rows } = await pool.query(
+      `
+      SELECT
+        user_account.id,
+        user_account.pseudo,
+        user_account.last_name,
+        user_account.first_name,
+        user_account.email,
+        avatar.img AS avatar,
+        AVG(quiz_result.note) AS note_best,
+        MAX(quiz_result.note) AS note_max,
+        MIN(quiz_result.note) AS note_min
+      FROM user_account
+      INNER JOIN avatar ON user_account.id_avatar = avatar.id
+      LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
+      WHERE user_account.id IN (
+        SELECT user_account_has_friend.id_friend
+        FROM user_account_has_friend
+        WHERE user_account_has_friend.id_user_account = $1
+        UNION
+        SELECT user_account_has_friend.id_user_account
+        FROM user_account_has_friend
+        WHERE user_account_has_friend.id_friend = $1
+      )
+      GROUP BY user_account.id, avatar.img;
+      `,
+      [id],
+    );
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const findLeaderboard = async (req: Request, res: Response) => {
+  try {
+    const order = req.params.order;
+    if (order != 'avg_note' && order != 'nb_quiz_make' && order != 'total_note') {
+      return res.status(500).json({ message: 'Order not accepted' });
+    }
+    const { rows } = await pool.query(
+      `
+      SELECT
+        user_account.id,
+        user_account.pseudo,
+        user_account.email,
+        user_account.first_name,
+        user_account.last_name,
+        AVG(quiz_result.note) AS avg_note,
+        COUNT(quiz_result.note) AS nb_quiz_make,
+        SUM(quiz_result.note) AS total_note
+      FROM user_account
+      INNER JOIN avatar ON avatar.id = user_account.id_avatar
+      LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
+      GROUP BY user_account.id
+      ORDER BY $1 DESC;
+      `,
+      [order],
+    );
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const findFriendLeaderboard = async (req: Request, res: Response) => {
+  try {
+    const id = getIdUserAccountInToken(req.headers.authorization!);
+    const order = req.params.order;
+    if (order != 'avg_note' && order != 'nb_quiz_make' && order != 'total_note') {
+      return res.status(500).json({ message: 'Order not accepted' });
+    }
+    const { rows } = await pool.query(
+      `
+      SELECT
+        user_account.id,
+        user_account.pseudo,
+        user_account.email,
+        user_account.first_name,
+        user_account.last_name,
+        AVG(quiz_result.note) AS avg_note,
+        COUNT(quiz_result.note) AS nb_quiz_make,
+        SUM(quiz_result.note) AS total_note
+      FROM user_account
+      INNER JOIN avatar ON avatar.id = user_account.id_avatar
+      LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
+      WHERE user_account.id IN (
+        SELECT user_account_has_friend.id_friend
+        FROM user_account_has_friend
+        WHERE user_account_has_friend.id_user_account = $1
+        UNION
+        SELECT user_account_has_friend.id_user_account
+        FROM user_account_has_friend
+        WHERE user_account_has_friend.id_friend = $1
+      )
+      GROUP BY user_account.id
+      ORDER BY $2 DESC;
+      `,
+      [id, order],
+    );
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const friendRequest = async (req: Request, res: Response) => {
+  try {
+    const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
+    const id = parseInt(req.params.id);
+
+    await pool.query(`INSERT INTO user_account_has_friend (id_user_account, id_friend, accepted) VALUES ($1, $2, $3)`, [idInitiator, id, false]);
+    return res.status(201).json({ message: 'Friend request send' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const acceptFriend = async (req: Request, res: Response) => {
+  try {
+    const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
+    const { id } = req.body;
+
+    await pool.query(`UPDATE user_account_has_friend SET accepted = true WHERE id_user_account = $1 AND id_friend = $2`, [id, idInitiator]);
+    return res.status(201).json({ message: 'Friend request send' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export { acceptFriend, findAllFriend, findFriendLeaderboard, findLeaderboard, findOne, friendRequest, login, register };
