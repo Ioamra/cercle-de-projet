@@ -1,48 +1,21 @@
 import { Request, Response } from 'express';
 import pool from '../config/db.config';
+import { Lesson } from '../models/lesson.model';
 
-type LessonWithoutDetail = {
-  id: number;
-  title: string;
-  description: string;
-  time_in_min: string;
-  difficulty: string;
-};
-
-type QuizWithoutDetail = {
-  id: number;
-  title: string;
-  description: string;
-  time_in_min: string;
-  difficulty: string;
-};
-
-type Lesson = {
-  id: number;
-  title: string;
-  content: string;
-  img: string;
-  video: string;
-  time_in_min: string;
-  difficulty: string;
-  similary_lessons: LessonWithoutDetail[];
-  similary_quizes: QuizWithoutDetail[];
-};
-
-export const findAll = async (req: Request, res: Response) => {
+export const findAll = async (req: Request, res: Response): Promise<Response<Lesson.ILessonWithoutDetail[]>> => {
   try {
-    const { rows } = await pool.query<LessonWithoutDetail[]>('SELECT id, title, description, time_in_min, difficulty FROM LESSON');
-    res.status(201).json(rows);
+    const { rows } = await pool.query('SELECT id, title, description, time_in_min, difficulty FROM LESSON');
+    return res.status(201).json(rows);
   } catch (error) {
     console.error('Error :' + error);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-export const findOne = async (req: Request, res: Response) => {
+export const findOne = async (req: Request, res: Response): Promise<Response<Lesson.ILesson[]>> => {
   try {
     const id = parseInt(req.params.id);
-    const { rows } = await pool.query<Lesson[]>(
+    const { rows } = await pool.query(
       `
       SELECT
         lesson.id,
@@ -77,9 +50,9 @@ export const findOne = async (req: Request, res: Response) => {
       [id],
     );
 
-    res.status(201).json(rows[0]);
+    return res.status(201).json(rows[0]);
   } catch (error) {
     console.error('Error :' + error);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };

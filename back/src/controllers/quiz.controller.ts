@@ -1,43 +1,11 @@
 import { Request, Response } from 'express';
 import pool from '../config/db.config';
+import { Quiz } from '../models/quiz.model';
 import { getIdUserAccountInToken } from '../services/jwt.service';
 
-type QuizWithoutDetail = {
-  id: number;
-  title: string;
-  description: string;
-  time_in_min: number;
-  difficulty: string;
-  avg_note: number;
-  play_count: number;
-};
-
-type Quiz = {
-  id: number;
-  title: string;
-  description: string;
-  time_in_min: number;
-  difficulty: string;
-  avg_note: number;
-  play_count: number;
-  questions: QuizQuestion[];
-};
-
-type QuizQuestion = {
-  id: number;
-  content: string;
-  responses: QuizResponse[];
-};
-
-type QuizResponse = {
-  id: number;
-  content: string;
-  is_correct: boolean;
-};
-
-export const findAll = async (req: Request, res: Response) => {
+export const findAll = async (req: Request, res: Response): Promise<Response<Quiz.IQuizWithoutDetail[]>> => {
   try {
-    const { rows } = await pool.query<QuizWithoutDetail>(`
+    const { rows } = await pool.query(`
       SELECT
         quiz.id,
         quiz.title,
@@ -51,17 +19,17 @@ export const findAll = async (req: Request, res: Response) => {
       GROUP BY quiz.id
     `);
 
-    res.status(201).json(rows);
+    return res.status(201).json(rows);
   } catch (error) {
     console.error('Error :' + error);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-export const findOne = async (req: Request, res: Response) => {
+export const findOne = async (req: Request, res: Response): Promise<Response<Quiz.IQuiz>> => {
   try {
     const id = parseInt(req.params.id);
-    const { rows } = await pool.query<Quiz>(
+    const { rows } = await pool.query(
       `
       SELECT
         quiz.id,
@@ -89,23 +57,17 @@ export const findOne = async (req: Request, res: Response) => {
       [id],
     );
 
-    res.status(201).json(rows[0]);
+    return res.status(201).json(rows[0]);
   } catch (error) {
     console.error('Error :' + error);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-type QuestionResult = {
-  id_question: number;
-  id_response: number;
-  is_correct: boolean;
-};
-
-export const addQuizResult = async (req: Request, res: Response) => {
+export const addQuizResult = async (req: Request, res: Response): Promise<Response<{ message: string }>> => {
   try {
     const id = parseInt(req.params.id);
-    const data: QuestionResult[] = req.body;
+    const data: Quiz.IQuestionResult[] = req.body;
     const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
 
     const nbAnswer = data.length;
@@ -125,9 +87,9 @@ export const addQuizResult = async (req: Request, res: Response) => {
         data[i].id_response,
       ]);
     }
-    res.status(201).json({ message: 'quiz as been added' });
+    return res.status(201).json({ message: 'quiz as been added' });
   } catch (error) {
     console.error('Error :' + error);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
