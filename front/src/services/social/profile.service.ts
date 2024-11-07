@@ -14,7 +14,7 @@ export async function getOneUserAccount(id: number): Promise<UserAccount.IUserAc
 
 export async function friendRequest(id: number): Promise<{ message: string }> {
   try {
-    const response = await apiService.get('/user-account/friend-request/' + id);
+    const response = await apiService.post('/user-account/friend-request/' + id);
     return response.data;
   } catch (error) {
     console.error('Error fetching lessons:', error);
@@ -24,7 +24,7 @@ export async function friendRequest(id: number): Promise<{ message: string }> {
 
 export async function acceptFriend(id: number): Promise<{ message: string }> {
   try {
-    const response = await apiService.get('/user-account/accept-friend/' + id);
+    const response = await apiService.post('/user-account/accept-friend/' + id);
     return response.data;
   } catch (error) {
     console.error('Error fetching lessons:', error);

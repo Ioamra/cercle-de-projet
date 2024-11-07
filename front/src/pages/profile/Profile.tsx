@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { UserAccount } from '../../models/userAccount.model';
-import { getOneUserAccount } from '../../services/social/profile.service';
+import { friendRequest, getOneUserAccount } from '../../services/social/profile.service';
 
 function Profile() {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<UserAccount.IUserAccountWithRecentActivity | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
     async function fetchUser() {
@@ -44,12 +46,17 @@ function Profile() {
               <p className="text-gray-600">{user.email}</p>
             </div>
           </div>
-          <button className="flex items-center space-x-2 bg-main-four text-white px-4 py-2 rounded-lg hover:bg-main-five">
-            <svg className="w-5 h-5" fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span>Ajouter un ami</span>
-          </button>
+          {user.id !== currentUser.id && (
+            <button
+              className="flex items-center space-x-2 bg-main-four text-white px-4 py-2 rounded-lg hover:bg-main-five"
+              onClick={async () => await friendRequest(+id!)}
+            >
+              <svg className="w-5 h-5" fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span>Ajouter un ami</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -59,7 +66,7 @@ function Profile() {
             <span className="h-6 w-6 text-green-600 text-xl">🏆</span>
             <h2 className="text-xl font-semibold">Points</h2>
           </div>
-          <p className="text-3xl font-bold text-green-600">{user.total_note}</p>
+          <p className="text-3xl font-bold text-main-four">{user.total_note || 0}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
@@ -67,7 +74,7 @@ function Profile() {
             <span className="h-6 w-6 text-green-600 text-xl">🏆</span>
             <h2 className="text-xl font-semibold">Note moyenne</h2>
           </div>
-          <p className="text-3xl font-bold text-main-four">{user.avg_note}</p>
+          <p className="text-3xl font-bold text-main-four">{user.avg_note || '-'}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
@@ -75,7 +82,7 @@ function Profile() {
             <span className="h-6 w-6 text-green-600 text-xl">🎖️</span>
             <h2 className="text-xl font-semibold">Quiz</h2>
           </div>
-          <p className="text-3xl font-bold text-main-four">{user.nb_quiz_make}</p>
+          <p className="text-3xl font-bold text-main-four">{user.nb_quiz_make || 0}</p>
           <p className="text-sm text-gray-600 mt-1">Complété</p>
         </div>
       </div>
