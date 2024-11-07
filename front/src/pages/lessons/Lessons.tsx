@@ -9,8 +9,6 @@ function Lessons() {
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900">Leçons sur l'environnement</h1>
         <p className="mt-2 text-gray-600">Développez vos connaissances sur notre environnement</p>
-
-        
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -34,13 +32,8 @@ function Lessons() {
                   <span>Niveau : {lesson.level}</span>
                 </div>
               </div>
-
-              <Link to={`/lesson/${lesson.id}`} className="mt-4 block">
-                <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer la leçon</button>
-              </Link>
             </div>
 
-            {/* Lien et bouton positionnés en bas avec un espace (mt-4) */}
             <Link to={`/lesson/${lesson.id}`} className="mt-auto p-6 pt-0">
               <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer la leçon</button>
             </Link>

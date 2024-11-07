@@ -14,9 +14,9 @@ function Leaderboard() {
         {leaderboard.slice(0, 3).map((user) => (
           <div key={user.id} className={`bg-white rounded-lg shadow-md p-6 text-center ${user.rank === 1 ? 'ring-2 ring-yellow-400' : ''}`}>
             <div className="flex justify-center mb-4">
-              {user.rank === 1 && <span className="h-12 w-12 text-yellow-400 text-6xl">🏆</span>}
-              {user.rank === 2 && <span className="h-12 w-12 text-gray-400 text-6xl">🥈</span>}
-              {user.rank === 3 && <span className="h-12 w-12 text-orange-400 text-6xl">🥉</span>}
+              {user.rank === 1 && <span className="h-12 w-12 text-yellow-400 text-6xl flex justify-center items-center">🏆</span>}
+              {user.rank === 2 && <span className="h-12 w-12 text-gray-400 text-6xl flex justify-center items-center">🥈</span>}
+              {user.rank === 3 && <span className="h-12 w-12 text-orange-400 text-6xl flex justify-center items-center">🥉</span>}
             </div>
             <h3 className="text-xl font-semibold text-gray-900">{user.username}</h3>
             <p className="text-main-four font-bold text-2xl mt-2">{user.points}</p>

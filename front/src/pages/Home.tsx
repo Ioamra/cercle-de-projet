@@ -13,7 +13,7 @@ function Home() {
         <div className="flex justify-center gap-4">
           <Link
             to="/register"
-            className="bg-main-three border-2 border-main-three text-white px-8 py-3 rounded-lg hover:bg-main-two hover:border-white transition"
+            className="bg-main-three border-2 border-main-three text-white px-8 py-3 rounded-lg hover:bg-main-two hover:border-white transition flex items-center justify-center"
           >
             Commencer
           </Link>
