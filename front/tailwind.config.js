@@ -9,7 +9,7 @@ export default {
         'main-three': '#633E00',
         'main-four': '#606C38',
         'main-five': '#323C00',
-      }
+      },
     },
   },
   plugins: [],
