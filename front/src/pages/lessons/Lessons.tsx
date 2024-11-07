@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import loadingGif from '../../assets/loading.webp'; // Adjust the path as necessary
 import { getLessons } from '../../services/lessonsService';
 
 type LessonWithoutDetail = {
@@ -30,7 +31,11 @@ function Lessons() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img className="w-1/3" src={loadingGif} alt="Loading..." />
+      </div>
+    );
   }
 
   return (
