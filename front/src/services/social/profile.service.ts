@@ -51,3 +51,23 @@ export async function getAllAvatar(): Promise<Avatar.IAvatar[]> {
     throw error;
   }
 }
+
+export async function getListAskingToBeFriend(): Promise<Avatar.IAvatar[]> {
+  try {
+    const response = await apiService.get('/user-account/list-ask-to-be-friend');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching lessons:', error);
+    throw error;
+  }
+}
+
+export async function getListWantToAddMe(): Promise<Avatar.IAvatar[]> {
+  try {
+    const response = await apiService.get('/user-account/list-want-to-add-me');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching lessons:', error);
+    throw error;
+  }
+}
