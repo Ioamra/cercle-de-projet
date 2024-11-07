@@ -36,9 +36,6 @@ function Friends() {
                     <p className="text-sm text-gray-600">Points</p>
                     <p className="font-semibold text-main-four">{friend.points}</p>
                   </div>
-                  <button className="p-2 text-gray-600 hover:text-main-four">
-                    <span className="h-5 w-5">💬</span>
-                  </button>
                 </div>
               </div>
             ))}
