@@ -5,7 +5,7 @@
 -- Dumped from database version 16.1
 -- Dumped by pg_dump version 16.1
 
--- Started on 2024-11-06 11:07:08
+-- Started on 2024-11-07 09:30:15
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 215 (class 1259 OID 41416)
+-- TOC entry 215 (class 1259 OID 49272)
 -- Name: avatar; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -30,7 +30,7 @@ CREATE TABLE public.avatar (
 
 
 --
--- TOC entry 216 (class 1259 OID 41419)
+-- TOC entry 216 (class 1259 OID 49275)
 -- Name: avatar_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -53,7 +53,7 @@ ALTER SEQUENCE public.avatar_id_seq OWNED BY public.avatar.id;
 
 
 --
--- TOC entry 217 (class 1259 OID 41420)
+-- TOC entry 217 (class 1259 OID 49276)
 -- Name: lesson; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -63,12 +63,14 @@ CREATE TABLE public.lesson (
     img text,
     video character varying(255),
     content text NOT NULL,
-    description text NOT NULL
+    description text NOT NULL,
+    time_in_min integer NOT NULL,
+    difficulty character varying(50) NOT NULL
 );
 
 
 --
--- TOC entry 218 (class 1259 OID 41425)
+-- TOC entry 218 (class 1259 OID 49281)
 -- Name: lesson_has_similary; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -79,7 +81,7 @@ CREATE TABLE public.lesson_has_similary (
 
 
 --
--- TOC entry 219 (class 1259 OID 41428)
+-- TOC entry 219 (class 1259 OID 49284)
 -- Name: lesson_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -102,7 +104,7 @@ ALTER SEQUENCE public.lesson_id_seq OWNED BY public.lesson.id;
 
 
 --
--- TOC entry 220 (class 1259 OID 41429)
+-- TOC entry 220 (class 1259 OID 49285)
 -- Name: question; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -114,7 +116,7 @@ CREATE TABLE public.question (
 
 
 --
--- TOC entry 221 (class 1259 OID 41434)
+-- TOC entry 221 (class 1259 OID 49290)
 -- Name: question_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -137,19 +139,21 @@ ALTER SEQUENCE public.question_id_seq OWNED BY public.question.id;
 
 
 --
--- TOC entry 222 (class 1259 OID 41435)
+-- TOC entry 222 (class 1259 OID 49291)
 -- Name: quiz; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.quiz (
     id integer NOT NULL,
     title text NOT NULL,
-    description text NOT NULL
+    description text NOT NULL,
+    time_in_min integer NOT NULL,
+    difficulty character varying NOT NULL
 );
 
 
 --
--- TOC entry 223 (class 1259 OID 41440)
+-- TOC entry 223 (class 1259 OID 49296)
 -- Name: quiz_has_lesson; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -160,7 +164,7 @@ CREATE TABLE public.quiz_has_lesson (
 
 
 --
--- TOC entry 224 (class 1259 OID 41443)
+-- TOC entry 224 (class 1259 OID 49299)
 -- Name: quiz_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -183,7 +187,7 @@ ALTER SEQUENCE public.quiz_id_seq OWNED BY public.quiz.id;
 
 
 --
--- TOC entry 225 (class 1259 OID 41444)
+-- TOC entry 225 (class 1259 OID 49300)
 -- Name: quiz_result; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -197,7 +201,7 @@ CREATE TABLE public.quiz_result (
 
 
 --
--- TOC entry 226 (class 1259 OID 41448)
+-- TOC entry 226 (class 1259 OID 49304)
 -- Name: quiz_result_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -220,7 +224,7 @@ ALTER SEQUENCE public.quiz_result_id_seq OWNED BY public.quiz_result.id;
 
 
 --
--- TOC entry 227 (class 1259 OID 41449)
+-- TOC entry 227 (class 1259 OID 49305)
 -- Name: response; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -233,7 +237,7 @@ CREATE TABLE public.response (
 
 
 --
--- TOC entry 228 (class 1259 OID 41452)
+-- TOC entry 228 (class 1259 OID 49308)
 -- Name: response_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -256,7 +260,7 @@ ALTER SEQUENCE public.response_id_seq OWNED BY public.response.id;
 
 
 --
--- TOC entry 229 (class 1259 OID 41453)
+-- TOC entry 229 (class 1259 OID 49309)
 -- Name: user_account; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -273,7 +277,7 @@ CREATE TABLE public.user_account (
 
 
 --
--- TOC entry 230 (class 1259 OID 41463)
+-- TOC entry 230 (class 1259 OID 49315)
 -- Name: user_account_has_friend; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -285,7 +289,7 @@ CREATE TABLE public.user_account_has_friend (
 
 
 --
--- TOC entry 231 (class 1259 OID 41467)
+-- TOC entry 231 (class 1259 OID 49319)
 -- Name: user_account_has_lesson; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -296,7 +300,7 @@ CREATE TABLE public.user_account_has_lesson (
 
 
 --
--- TOC entry 232 (class 1259 OID 41470)
+-- TOC entry 232 (class 1259 OID 49322)
 -- Name: user_account_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -319,7 +323,7 @@ ALTER SEQUENCE public.user_account_id_seq OWNED BY public.user_account.id;
 
 
 --
--- TOC entry 233 (class 1259 OID 41471)
+-- TOC entry 233 (class 1259 OID 49323)
 -- Name: user_response; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -332,7 +336,7 @@ CREATE TABLE public.user_response (
 
 
 --
--- TOC entry 234 (class 1259 OID 41474)
+-- TOC entry 234 (class 1259 OID 49326)
 -- Name: user_response_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -355,7 +359,7 @@ ALTER SEQUENCE public.user_response_id_seq OWNED BY public.user_response.id;
 
 
 --
--- TOC entry 4739 (class 2604 OID 41475)
+-- TOC entry 4739 (class 2604 OID 49327)
 -- Name: avatar id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -363,7 +367,7 @@ ALTER TABLE ONLY public.avatar ALTER COLUMN id SET DEFAULT nextval('public.avata
 
 
 --
--- TOC entry 4740 (class 2604 OID 41476)
+-- TOC entry 4740 (class 2604 OID 49328)
 -- Name: lesson id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -371,7 +375,7 @@ ALTER TABLE ONLY public.lesson ALTER COLUMN id SET DEFAULT nextval('public.lesso
 
 
 --
--- TOC entry 4741 (class 2604 OID 41477)
+-- TOC entry 4741 (class 2604 OID 49329)
 -- Name: question id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -379,7 +383,7 @@ ALTER TABLE ONLY public.question ALTER COLUMN id SET DEFAULT nextval('public.que
 
 
 --
--- TOC entry 4742 (class 2604 OID 41478)
+-- TOC entry 4742 (class 2604 OID 49330)
 -- Name: quiz id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -387,7 +391,7 @@ ALTER TABLE ONLY public.quiz ALTER COLUMN id SET DEFAULT nextval('public.quiz_id
 
 
 --
--- TOC entry 4743 (class 2604 OID 41479)
+-- TOC entry 4743 (class 2604 OID 49331)
 -- Name: quiz_result id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -395,7 +399,7 @@ ALTER TABLE ONLY public.quiz_result ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 4745 (class 2604 OID 41480)
+-- TOC entry 4745 (class 2604 OID 49332)
 -- Name: response id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -403,7 +407,7 @@ ALTER TABLE ONLY public.response ALTER COLUMN id SET DEFAULT nextval('public.res
 
 
 --
--- TOC entry 4746 (class 2604 OID 41481)
+-- TOC entry 4746 (class 2604 OID 49333)
 -- Name: user_account id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -411,7 +415,7 @@ ALTER TABLE ONLY public.user_account ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- TOC entry 4749 (class 2604 OID 41482)
+-- TOC entry 4749 (class 2604 OID 49334)
 -- Name: user_response id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -419,7 +423,7 @@ ALTER TABLE ONLY public.user_response ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 4937 (class 0 OID 41416)
+-- TOC entry 4937 (class 0 OID 49272)
 -- Dependencies: 215
 -- Data for Name: avatar; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -429,7 +433,7 @@ INSERT INTO public.avatar VALUES (2, 'avatar/tankman.png');
 
 
 --
--- TOC entry 4939 (class 0 OID 41420)
+-- TOC entry 4939 (class 0 OID 49276)
 -- Dependencies: 217
 -- Data for Name: lesson; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -437,7 +441,7 @@ INSERT INTO public.avatar VALUES (2, 'avatar/tankman.png');
 
 
 --
--- TOC entry 4940 (class 0 OID 41425)
+-- TOC entry 4940 (class 0 OID 49281)
 -- Dependencies: 218
 -- Data for Name: lesson_has_similary; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -445,7 +449,7 @@ INSERT INTO public.avatar VALUES (2, 'avatar/tankman.png');
 
 
 --
--- TOC entry 4942 (class 0 OID 41429)
+-- TOC entry 4942 (class 0 OID 49285)
 -- Dependencies: 220
 -- Data for Name: question; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -473,17 +477,17 @@ INSERT INTO public.question VALUES (20, 'Quel est l''effet de la déforestation 
 
 
 --
--- TOC entry 4944 (class 0 OID 41435)
+-- TOC entry 4944 (class 0 OID 49291)
 -- Dependencies: 222
 -- Data for Name: quiz; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.quiz VALUES (1, 'Quizz Climat', 'Quizz Climat');
-INSERT INTO public.quiz VALUES (2, 'Quizz Océans', 'Quizz Océans');
+INSERT INTO public.quiz VALUES (1, 'Quizz Climat', 'Quizz Climat', 20, 'Intermédiaire');
+INSERT INTO public.quiz VALUES (2, 'Quizz Océans', 'Quizz Océans', 20, 'Intermédiaire');
 
 
 --
--- TOC entry 4945 (class 0 OID 41440)
+-- TOC entry 4945 (class 0 OID 49296)
 -- Dependencies: 223
 -- Data for Name: quiz_has_lesson; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -491,7 +495,7 @@ INSERT INTO public.quiz VALUES (2, 'Quizz Océans', 'Quizz Océans');
 
 
 --
--- TOC entry 4947 (class 0 OID 41444)
+-- TOC entry 4947 (class 0 OID 49300)
 -- Dependencies: 225
 -- Data for Name: quiz_result; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -499,7 +503,7 @@ INSERT INTO public.quiz VALUES (2, 'Quizz Océans', 'Quizz Océans');
 
 
 --
--- TOC entry 4949 (class 0 OID 41449)
+-- TOC entry 4949 (class 0 OID 49305)
 -- Dependencies: 227
 -- Data for Name: response; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -587,7 +591,7 @@ INSERT INTO public.response VALUES (80, 'Augmentation de la pollution par ruisse
 
 
 --
--- TOC entry 4951 (class 0 OID 41453)
+-- TOC entry 4951 (class 0 OID 49309)
 -- Dependencies: 229
 -- Data for Name: user_account; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -597,7 +601,7 @@ INSERT INTO public.user_account VALUES (2, 'user@gmail.com', 'User', 'Michel', '
 
 
 --
--- TOC entry 4952 (class 0 OID 41463)
+-- TOC entry 4952 (class 0 OID 49315)
 -- Dependencies: 230
 -- Data for Name: user_account_has_friend; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -605,7 +609,7 @@ INSERT INTO public.user_account VALUES (2, 'user@gmail.com', 'User', 'Michel', '
 
 
 --
--- TOC entry 4953 (class 0 OID 41467)
+-- TOC entry 4953 (class 0 OID 49319)
 -- Dependencies: 231
 -- Data for Name: user_account_has_lesson; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -613,7 +617,7 @@ INSERT INTO public.user_account VALUES (2, 'user@gmail.com', 'User', 'Michel', '
 
 
 --
--- TOC entry 4955 (class 0 OID 41471)
+-- TOC entry 4955 (class 0 OID 49323)
 -- Dependencies: 233
 -- Data for Name: user_response; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -693,7 +697,7 @@ SELECT pg_catalog.setval('public.user_response_id_seq', 1, false);
 
 
 --
--- TOC entry 4751 (class 2606 OID 41484)
+-- TOC entry 4751 (class 2606 OID 49336)
 -- Name: avatar avatar_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -702,7 +706,7 @@ ALTER TABLE ONLY public.avatar
 
 
 --
--- TOC entry 4755 (class 2606 OID 41486)
+-- TOC entry 4755 (class 2606 OID 49338)
 -- Name: lesson_has_similary lesson_has_similary_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -711,7 +715,7 @@ ALTER TABLE ONLY public.lesson_has_similary
 
 
 --
--- TOC entry 4753 (class 2606 OID 41488)
+-- TOC entry 4753 (class 2606 OID 49340)
 -- Name: lesson lesson_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -720,7 +724,7 @@ ALTER TABLE ONLY public.lesson
 
 
 --
--- TOC entry 4757 (class 2606 OID 41490)
+-- TOC entry 4757 (class 2606 OID 49342)
 -- Name: question question_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -729,7 +733,7 @@ ALTER TABLE ONLY public.question
 
 
 --
--- TOC entry 4761 (class 2606 OID 41492)
+-- TOC entry 4761 (class 2606 OID 49344)
 -- Name: quiz_has_lesson quiz_has_lesson_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -738,7 +742,7 @@ ALTER TABLE ONLY public.quiz_has_lesson
 
 
 --
--- TOC entry 4759 (class 2606 OID 41494)
+-- TOC entry 4759 (class 2606 OID 49346)
 -- Name: quiz quiz_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -747,7 +751,7 @@ ALTER TABLE ONLY public.quiz
 
 
 --
--- TOC entry 4763 (class 2606 OID 41496)
+-- TOC entry 4763 (class 2606 OID 49348)
 -- Name: quiz_result quiz_result_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -756,7 +760,7 @@ ALTER TABLE ONLY public.quiz_result
 
 
 --
--- TOC entry 4765 (class 2606 OID 41498)
+-- TOC entry 4765 (class 2606 OID 49350)
 -- Name: response response_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -765,7 +769,7 @@ ALTER TABLE ONLY public.response
 
 
 --
--- TOC entry 4767 (class 2606 OID 41460)
+-- TOC entry 4767 (class 2606 OID 49352)
 -- Name: user_account user_account_email_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -774,7 +778,7 @@ ALTER TABLE ONLY public.user_account
 
 
 --
--- TOC entry 4773 (class 2606 OID 41500)
+-- TOC entry 4773 (class 2606 OID 49354)
 -- Name: user_account_has_friend user_account_has_friend_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -783,7 +787,7 @@ ALTER TABLE ONLY public.user_account_has_friend
 
 
 --
--- TOC entry 4775 (class 2606 OID 41502)
+-- TOC entry 4775 (class 2606 OID 49356)
 -- Name: user_account_has_lesson user_account_has_lesson_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -792,7 +796,7 @@ ALTER TABLE ONLY public.user_account_has_lesson
 
 
 --
--- TOC entry 4769 (class 2606 OID 41504)
+-- TOC entry 4769 (class 2606 OID 49358)
 -- Name: user_account user_account_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -801,7 +805,7 @@ ALTER TABLE ONLY public.user_account
 
 
 --
--- TOC entry 4771 (class 2606 OID 41462)
+-- TOC entry 4771 (class 2606 OID 49360)
 -- Name: user_account user_account_pseudo_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -810,7 +814,7 @@ ALTER TABLE ONLY public.user_account
 
 
 --
--- TOC entry 4777 (class 2606 OID 41506)
+-- TOC entry 4777 (class 2606 OID 49362)
 -- Name: user_response user_response_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -819,7 +823,7 @@ ALTER TABLE ONLY public.user_response
 
 
 --
--- TOC entry 4778 (class 2606 OID 41507)
+-- TOC entry 4778 (class 2606 OID 49363)
 -- Name: lesson_has_similary lesson_has_similary_id_lesson_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -828,7 +832,7 @@ ALTER TABLE ONLY public.lesson_has_similary
 
 
 --
--- TOC entry 4779 (class 2606 OID 41512)
+-- TOC entry 4779 (class 2606 OID 49368)
 -- Name: lesson_has_similary lesson_has_similary_id_lesson_similary_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -837,7 +841,7 @@ ALTER TABLE ONLY public.lesson_has_similary
 
 
 --
--- TOC entry 4780 (class 2606 OID 41517)
+-- TOC entry 4780 (class 2606 OID 49373)
 -- Name: question question_id_quiz_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -846,7 +850,7 @@ ALTER TABLE ONLY public.question
 
 
 --
--- TOC entry 4781 (class 2606 OID 41522)
+-- TOC entry 4781 (class 2606 OID 49378)
 -- Name: quiz_has_lesson quiz_has_lesson_id_lesson_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -855,7 +859,7 @@ ALTER TABLE ONLY public.quiz_has_lesson
 
 
 --
--- TOC entry 4782 (class 2606 OID 41527)
+-- TOC entry 4782 (class 2606 OID 49383)
 -- Name: quiz_has_lesson quiz_has_lesson_id_quiz_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -864,7 +868,7 @@ ALTER TABLE ONLY public.quiz_has_lesson
 
 
 --
--- TOC entry 4783 (class 2606 OID 41532)
+-- TOC entry 4783 (class 2606 OID 49388)
 -- Name: quiz_result quiz_result_id_quiz_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -873,7 +877,7 @@ ALTER TABLE ONLY public.quiz_result
 
 
 --
--- TOC entry 4784 (class 2606 OID 41537)
+-- TOC entry 4784 (class 2606 OID 49393)
 -- Name: quiz_result quiz_result_id_user_account_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -882,7 +886,7 @@ ALTER TABLE ONLY public.quiz_result
 
 
 --
--- TOC entry 4785 (class 2606 OID 41542)
+-- TOC entry 4785 (class 2606 OID 49398)
 -- Name: response response_id_question_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -891,7 +895,7 @@ ALTER TABLE ONLY public.response
 
 
 --
--- TOC entry 4787 (class 2606 OID 41547)
+-- TOC entry 4787 (class 2606 OID 49403)
 -- Name: user_account_has_friend user_account_has_friend_id_friend_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -900,7 +904,7 @@ ALTER TABLE ONLY public.user_account_has_friend
 
 
 --
--- TOC entry 4788 (class 2606 OID 41552)
+-- TOC entry 4788 (class 2606 OID 49408)
 -- Name: user_account_has_friend user_account_has_friend_id_user_account_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -909,7 +913,7 @@ ALTER TABLE ONLY public.user_account_has_friend
 
 
 --
--- TOC entry 4789 (class 2606 OID 41557)
+-- TOC entry 4789 (class 2606 OID 49413)
 -- Name: user_account_has_lesson user_account_has_lesson_id_lesson_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -918,7 +922,7 @@ ALTER TABLE ONLY public.user_account_has_lesson
 
 
 --
--- TOC entry 4790 (class 2606 OID 41562)
+-- TOC entry 4790 (class 2606 OID 49418)
 -- Name: user_account_has_lesson user_account_has_lesson_id_user_account_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -927,7 +931,7 @@ ALTER TABLE ONLY public.user_account_has_lesson
 
 
 --
--- TOC entry 4786 (class 2606 OID 41567)
+-- TOC entry 4786 (class 2606 OID 49423)
 -- Name: user_account user_account_id_avatar_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -936,7 +940,7 @@ ALTER TABLE ONLY public.user_account
 
 
 --
--- TOC entry 4791 (class 2606 OID 41572)
+-- TOC entry 4791 (class 2606 OID 49428)
 -- Name: user_response user_response_id_question_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -945,7 +949,7 @@ ALTER TABLE ONLY public.user_response
 
 
 --
--- TOC entry 4792 (class 2606 OID 41577)
+-- TOC entry 4792 (class 2606 OID 49433)
 -- Name: user_response user_response_id_quiz_result_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -954,7 +958,7 @@ ALTER TABLE ONLY public.user_response
 
 
 --
--- TOC entry 4793 (class 2606 OID 41582)
+-- TOC entry 4793 (class 2606 OID 49438)
 -- Name: user_response user_response_id_response_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -962,7 +966,7 @@ ALTER TABLE ONLY public.user_response
     ADD CONSTRAINT user_response_id_response_fkey FOREIGN KEY (id_response) REFERENCES public.response(id);
 
 
--- Completed on 2024-11-06 11:07:08
+-- Completed on 2024-11-07 09:30:15
 
 --
 -- PostgreSQL database dump complete
