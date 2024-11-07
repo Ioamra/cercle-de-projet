@@ -74,7 +74,7 @@ export const findOne = async (req: Request, res: Response) => {
         ARRAY_AGG(JSON_BUILD_OBJECT(
           'id', question.id,
           'content', question.content,
-          'response', (SELECT ARRAY_AGG(JSON_BUILD_OBJECT(
+          'responses', (SELECT ARRAY_AGG(JSON_BUILD_OBJECT(
             'id', response.id,
             'content', response.content,
             'is_correct', response.is_correct
