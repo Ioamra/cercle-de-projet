@@ -89,7 +89,7 @@ export const findOne = async (req: Request, res: Response) => {
       [id],
     );
 
-    res.status(201).json(rows);
+    res.status(201).json(rows[0]);
   } catch (error) {
     console.error('Error :' + error);
     res.status(500).json({ message: 'Internal server error' });
