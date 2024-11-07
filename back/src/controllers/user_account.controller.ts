@@ -9,6 +9,7 @@ type User = {
   first_name: string;
   last_name: string;
   avatar: string;
+  role: string;
 };
 
 const login = async (req: Request, res: Response) => {
@@ -28,6 +29,7 @@ const login = async (req: Request, res: Response) => {
         first_name: rows[0].first_name,
         last_name: rows[0].last_name,
         avatar: 'localhost:3000/api/img/' + rows[0].avatar,
+        role: rows[0].role,
       };
       return res.status(200).json({
         token: generateToken({
@@ -78,6 +80,7 @@ const register = async (req: Request, res: Response) => {
             first_name,
             last_name,
             avatar: 'localhost:3000/api/img/' + avatarRows[0].img,
+            role: 'user',
           },
         });
       }
