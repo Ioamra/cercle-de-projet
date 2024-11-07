@@ -33,11 +33,8 @@ function Quizzes() {
               </div>
             </div>
 
-            {/* Espace en bas pour le bouton */}
-            <div className="mt-4">
-              <button className="w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer le Quizz</button>
+              <button className="mt-4 w-full bg-main-four text-white py-2 px-4 rounded-md hover:bg-main-five transition">Commencer le Quizz</button>
             </div>
-          </div>
         ))}
       </div>
     </div>
