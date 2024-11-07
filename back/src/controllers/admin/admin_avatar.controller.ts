@@ -52,15 +52,26 @@ export const update = [
       return;
     }
     const { rows } = await pool.query("SELECT img FROM avatar WHERE id = $1", [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Avatar not found' });
+    }
+
     const oldPath = path.join(__dirname, '../../upload/avatar', rows[0].img);
-    // Delete the old file
+
+    if (fs.existsSync(oldPath)) {
+      // Delete the old file
     fs.unlinkSync(oldPath);
+    } else {
+      console.warn(`Old file not found at ${oldPath}`);
+    }
+    
     // Save the file to the upload directory
     fs.writeFileSync(uploadPath, buffer);
 
 
     await pool.query("UPDATE avatar SET img = $1 WHERE id = $2", [originalname, id]);
-    res.status(201).json({ message: 'Avatar has been update' });
+    res.status(200).json({ message: 'Avatar has been update' });
   } catch (error) {
     console.error('Error :' + error);
     res.status(500).json({ message: 'Internal server error' });
@@ -70,20 +81,27 @@ export const update = [
 export const remove = async (req: Request, res: Response) => {
   try {
 
-    if (!req.file) {
-      res.status(400).json({ message: 'No file uploaded' });
-      return;
+    const id = parseInt(req.params.id);
+    const { rows } = await pool.query("SELECT img from avatar WHERE id = $1", [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Avatar not found' });
     }
 
-    const id = parseInt(req.params.id);
-    const { originalname, buffer, mimetype } = req.file;
-    const uploadPath = path.join(__dirname, '../../upload/avatar', originalname);
-    const { rows } = await pool.query("DELETE from avatar WHERE id = $1", [id]);
+    const uploadPath = path.join(__dirname, '../../upload/avatar', rows[0].img);
 
-    fs.unlinkSync(uploadPath);
+    await pool.query("UPDATE user_account SET id_avatar = 1 WHERE id_avatar = $1", [id]);
     
+    await pool.query("DELETE from avatar WHERE id = $1", [id]);
 
-    res.status(201).json({ message: 'Avatar has been delete' });
+    if(fs.existsSync(uploadPath)){
+      fs.unlinkSync(uploadPath);
+    } else{
+      console.warn(`File not found at ${uploadPath}`);
+    }
+    
+    
+    res.status(200).json({ message: 'Avatar has been delete' });
   } catch (error) {
     console.error('Error :' + error);
     res.status(500).json({ message: 'Internal server error' });
