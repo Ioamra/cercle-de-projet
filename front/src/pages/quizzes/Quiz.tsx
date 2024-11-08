@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import loadingGif from '../../assets/loading.webp';
 import { Quiz as QuizModel } from '../../models/quiz.model';
-import { getQuiz } from '../../services/quizzes/quiz.service';
+import { addQuizResult, getQuiz } from '../../services/quizzes/quiz.service';
 
 function Quiz() {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +15,8 @@ function Quiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [questionResult, setQuestionResult] = useState<QuizModel.IQuestionResult[]>([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     async function fetchQuiz() {
@@ -33,7 +35,6 @@ function Quiz() {
     fetchQuiz();
   }, [id]);
 
-  // Si l'utilisateur n'a pas connecté (localstorage user vide), marquer un message d'erreur
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
@@ -61,11 +62,34 @@ function Quiz() {
   const nextQuestion = () => {
     if (selectedAnswer !== null) {
       if (currentQuestionIndex < quiz.questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setQuestionResult((prevResults) => {
+          const updatedResults = [
+            ...prevResults,
+            {
+              id_question: currentQuestion.id,
+              id_response: selectedAnswer,
+              is_correct: currentQuestion.responses.find((r) => r.id === selectedAnswer)?.is_correct!,
+            },
+          ];
+          return updatedResults;
+        });
+        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
         setSelectedAnswer(null);
       } else {
-        alert('Quiz terminé !');
-        navigate('/');
+        console.log('Quiz terminé !');
+        setQuestionResult((prevResults) => {
+          const updatedResults = [
+            ...prevResults,
+            {
+              id_question: currentQuestion.id,
+              id_response: selectedAnswer,
+              is_correct: currentQuestion.responses.find((r) => r.id === selectedAnswer)?.is_correct!,
+            },
+          ];
+          addQuizResult(+id, updatedResults);
+          return updatedResults;
+        });
+        setShowModal(true);
       }
     } else {
       alert('Veuillez sélectionner une réponse avant de continuer.');
@@ -75,11 +99,14 @@ function Quiz() {
   const prevQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setQuestionResult(questionResult.slice(0, -1));
       setSelectedAnswer(null);
     }
   };
 
   const currentQuestion = questions[currentQuestionIndex] as QuizModel.IQuizQuestion;
+
+  const correctAnswersCount = questionResult.filter((result) => result.is_correct).length;
 
   return (
     <div className="min-h-fit flex flex-col justify-center items-center">
@@ -125,6 +152,23 @@ function Quiz() {
           </button>
         </div>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-2xl font-bold mb-4">Quiz terminé !</h2>
+            <p className="text-lg mb-4">
+              Vous avez {correctAnswersCount} bonnes réponses sur {questionResult.length}.
+            </p>
+            <button
+              onClick={() => navigate('/')}
+              className="bg-main-four text-white py-2 px-4 rounded-lg text-lg font-semibold hover:bg-main-five transition"
+            >
+              Retourner à la page quiz
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

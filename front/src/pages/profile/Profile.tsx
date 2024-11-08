@@ -95,9 +95,17 @@ function Profile() {
               <div key={activity.id_quiz_result} className="flex items-center justify-between py-2 border-b">
                 <div>
                   <p className="font-medium">A completé le quiz : "{activity.title}"</p>
-                  <p className="text-sm text-gray-600">Score: {activity.note}/10</p>
+                  <p className="text-sm text-gray-600">Score: {activity.note * 10}/10</p>
                 </div>
-                <span className="text-sm text-gray-500">{activity.creation_date}</span>
+                <span className="text-sm text-gray-500">
+                  {new Date(activity.creation_date).toLocaleString('fr-FR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })}
+                </span>
               </div>
             ))}
           </div>
