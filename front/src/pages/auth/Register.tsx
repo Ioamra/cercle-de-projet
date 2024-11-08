@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Avatar } from '../../models/avatar.model';
 import { register } from '../../services/auth/register.service';
+import { getAllAvatar } from '../../services/social/profile.service';
 
 function Register() {
   const [pseudo, setPseudo] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [idAvatar, setIdAvatar] = useState<number>(1);
+  const [avatars, setAvatars] = useState<Avatar.IAvatar[]>([]);
+  const [selectedAvatar, setSelectedAvatar] = useState<number>(1);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); // Nouveau champ pour confirmer le mot de passe
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchAvatars() {
+      try {
+        const avatarData = await getAllAvatar();
+        setAvatars(avatarData);
+      } catch (error) {
+        console.error('Error fetching avatars:', error);
+      }
+    }
+
+    fetchAvatars();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +42,7 @@ function Register() {
     setLoading(true);
 
     try {
-      const res = await register(email, pseudo, firstName, lastName, password, idAvatar);
+      const res = await register(email, pseudo, firstName, lastName, password, selectedAvatar);
       if (res === 'ok') {
         navigate('/');
       }
@@ -41,7 +57,6 @@ function Register() {
     <div className="min-h-[80vh] flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="flex items-center justify-center mb-8">
-          <span className="h-8 w-8 text-green-600 mr-2">📝</span>
           <h1 className="text-2xl font-bold text-gray-900">Créer un compte</h1>
         </div>
 
@@ -96,24 +111,26 @@ function Register() {
             </div>
           </div>
 
-          {/* Sélection de l'avatar */}
+          {/* Card pour la sélection de l'avatar */}
           <div className="mb-4">
-            <label htmlFor="idAvatar" className="block text-sm font-medium text-gray-700">
-              Avatar
-            </label>
-            <select
-              id="idAvatar"
-              value={idAvatar}
-              onChange={(e) => setIdAvatar(Number(e.target.value))}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-main-four focus:border-main-four sm:text-sm"
-              required
-            >
-              <option value={1}>Avatar 1</option>
-              <option value={2}>Avatar 2</option>
-              <option value={3}>Avatar 3</option>
-              {/* Ajoutez plus d'options selon vos avatars disponibles */}
-            </select>
+            <label className="text-sm font-medium text-main-five">Avatar</label>
+            <div className="border border-gray-300 rounded-md p-2 max-h-48 overflow-y-auto">
+              <div className="flex flex-row items-center justify-start gap-2">
+                {avatars.map((avatar) => (
+                  <div
+                    key={avatar.id}
+                    className={`cursor-pointer w-12 border-2 rounded-full ${selectedAvatar === avatar.id ? 'border-main-four' : 'border-white'}`}
+                    onClick={() => setSelectedAvatar(avatar.id)}
+                  >
+                    <img src={'http://' + avatar.img} alt={`Avatar ${avatar.id}`} className="w-full h-auto rounded-full" />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
+          {/* Hidden input to store selected avatar ID */}
+          <input type="hidden" id="idAvatar" value={selectedAvatar} />
 
           {/* Email */}
           <div className="mb-4">

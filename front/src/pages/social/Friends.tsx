@@ -131,8 +131,8 @@ function Friends() {
             {friends!.map((friend) => (
               <div key={friend.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
                 <div className="flex items-center space-x-4">
-                  <div className="bg-green-100 p-3 rounded-full">
-                    <span className="h-6 w-6 text-main-four">👥</span>
+                  <div className="bg-green-100 rounded-full">
+                    <img src={'http://' + friend.avatar} className="w-12 rounded-full" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{friend.pseudo}</h3>
@@ -174,8 +174,8 @@ function Friends() {
                 {searchResults.map((friend) => (
                   <div key={friend.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
                     <div className="flex items-center space-x-4">
-                      <div className="bg-green-100 p-3 rounded-full">
-                        <span className="h-6 w-6 text-main-four">👥</span>
+                      <div className="bg-green-100 rounded-full">
+                        <img src={'http://' + friend.avatar} className="w-12 rounded-full" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-gray-900">{friend.pseudo}</h3>

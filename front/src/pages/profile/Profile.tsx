@@ -42,8 +42,8 @@ function Profile() {
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center space-x-4 justify-between">
           <div className="flex flex-row items-center gap-5">
-            <div className="bg-green-100 p-3 rounded-full">
-              <span className="h-8 w-8 text-green-600 text-2xl">👤</span>
+            <div className="bg-green-100 rounded-full">
+              <img src={'http://' + user.avatar} className="w-20 h-20 rounded-full" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{user.pseudo}</h1>

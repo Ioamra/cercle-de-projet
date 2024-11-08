@@ -32,7 +32,6 @@ function Login() {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="flex items-center justify-center mb-8">
           {/* Remplace l'icône LogIn par un élément natif, par exemple un emoji */}
-          <span className="h-8 w-8 text-green-600 mr-2">🔑</span>
           <h1 className="text-2xl font-bold text-gray-900">Se connecter</h1>
         </div>
 

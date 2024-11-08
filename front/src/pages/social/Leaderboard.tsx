@@ -120,14 +120,22 @@ function Leaderboard() {
       {/* Top 3 utilisateurs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {visibleUsers.slice(0, 3).map((user, index) => (
-          <div key={user.id} className={`bg-white rounded-lg shadow-md p-6 text-center ${index === 0 ? 'ring-2 ring-yellow-400' : ''}`}>
-            <div className="flex justify-center mb-4">
+          <div
+            key={user.id}
+            className={`bg-white flex flex-col gap-4 rounded-lg shadow-md p-6 text-center ${index === 0 ? 'ring-2 ring-yellow-400' : ''}`}
+          >
+            <div className=" rounded-full flex justify-center items-center">
+              <img src={'http://' + user.avatar} className="w-20 rounded-full" />
+            </div>
+            <div className="flex flex-row items-center justify-around">
+              <h3 className="text-xl font-semibold text-gray-900">{user.pseudo}</h3>
+            </div>
+            <p className="text-main-four font-bold text-2xl">{getDisplayValue(user)}</p>
+            <div className="flex justify-center mb-2">
               {index === 0 && <span className="h-12 w-12 text-yellow-400 text-6xl flex justify-center items-center">🏆</span>}
               {index === 1 && <span className="h-12 w-12 text-gray-400 text-6xl flex justify-center items-center">🥈</span>}
               {index === 2 && <span className="h-12 w-12 text-orange-400 text-6xl flex justify-center items-center">🥉</span>}
             </div>
-            <h3 className="text-xl font-semibold text-gray-900">{user.pseudo}</h3>
-            <p className="text-main-four font-bold text-2xl mt-2">{getDisplayValue(user)}</p>
           </div>
         ))}
       </div>
@@ -146,6 +154,9 @@ function Leaderboard() {
               >
                 <div className="flex items-center space-x-4">
                   <span className="w-8 h-8 flex items-center justify-center rounded-full font-semibold">{index + 4}</span>
+                  <div className="bg-green-100 rounded-full">
+                    <img src={'http://' + user.avatar} className="w-12 rounded-full" />
+                  </div>
                   <span className="font-medium text-gray-900">{user.pseudo}</span>
                 </div>
                 <div className="text-right flex flex-row gap-2 items-center">
