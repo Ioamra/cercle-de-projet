@@ -88,29 +88,29 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Use
     const { rows } = await pool.query(
       `
       SELECT
-        user_account.id,
-        user_account.pseudo,
-        user_account.email,
-        user_account.first_name,
-        user_account.last_name,
-        'localhost:3000/api/img/' || avatar.img AS avatar,
-        AVG(quiz_result.note)*10 AS avg_note,
-        COUNT(quiz_result.note) AS nb_quiz_make,
-        SUM(quiz_result.note)*10 AS total_note,
-        COALESCE(ARRAY_AGG(JSON_BUILD_OBJECT(
-          'id_quiz', quiz.id,
-          'id_quiz_result', quiz_result.id,
-          'title', quiz.title,
-          'difficulty', quiz.difficulty,
-          'creation_date', quiz_result.creation_date,
-          'note', quiz_result.note
-        )) FILTER (WHERE quiz_result.id IS NOT NULL), '{}') AS recent_activity
+      user_account.id,
+      user_account.pseudo,
+      user_account.email,
+      user_account.first_name,
+      user_account.last_name,
+      'localhost:3000/api/img/' || avatar.img AS avatar,
+      ROUND(AVG(quiz_result.note)*10, 2) AS avg_note,
+      COUNT(quiz_result.note) AS nb_quiz_make,
+      SUM(quiz_result.note)*10 AS total_note,
+      COALESCE(ARRAY_AGG(JSON_BUILD_OBJECT(
+        'id_quiz', quiz.id,
+        'id_quiz_result', quiz_result.id,
+        'title', quiz.title,
+        'difficulty', quiz.difficulty,
+        'creation_date', quiz_result.creation_date,
+        'note', quiz_result.note
+      )) FILTER (WHERE quiz_result.id IS NOT NULL), '{}') AS recent_activity
       FROM user_account
       INNER JOIN avatar ON avatar.id = user_account.id_avatar
       LEFT JOIN quiz_result ON quiz_result.id_user_account = user_account.id
-      INNER JOIN quiz ON quiz.id = quiz_result.id_quiz
+      LEFT JOIN quiz ON quiz.id = quiz_result.id_quiz
       WHERE user_account.id = $1
-	    GROUP BY user_account.id, avatar.img;
+      GROUP BY user_account.id, avatar.img;
     `,
       [id],
     );
@@ -127,7 +127,7 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Use
 
 export const search = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccount[]>> => {
   try {
-    const search = parseInt(req.params.search);
+    const search = req.params.search;
     const { rows } = await pool.query(
       `
       SELECT
@@ -143,7 +143,7 @@ export const search = async (req: Request, res: Response): Promise<Response<User
       FROM user_account
       INNER JOIN avatar ON user_account.id_avatar = avatar.id
       LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
-      WHERE pseudo LIKE $1
+      WHERE LOWER(pseudo) LIKE LOWER($1)
       GROUP BY user_account.id, avatar.img;
       `,
       ['%' + search + '%'],
@@ -219,7 +219,7 @@ export const findFriendLeaderboard = async (req: Request, res: Response): Promis
         FROM user_account_has_friend
         WHERE user_account_has_friend.id_friend = $1
       )
-      GROUP BY user_account.id
+      GROUP BY user_account.id, avatar.img
       ORDER BY $2 DESC;
       `,
       [id, order],

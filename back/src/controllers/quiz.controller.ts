@@ -71,6 +71,7 @@ export const addQuizResult = async (req: Request, res: Response): Promise<Respon
     const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
 
     const nbAnswer = data.length;
+    console.log(data);
     const nbCorrectAnswer = data.filter((result) => result.is_correct).length;
 
     const { rows } = await pool.query('INSERT INTO quiz_result (note, id_quiz, id_user_account) VALUES ($1, $2, $3) RETURNING id', [
