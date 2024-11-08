@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import loadingGif from '../../assets/loading.webp';
 import { UserAccount } from '../../models/userAccount.model';
 import { getFriendLeaderboard } from '../../services/social/friends.service';
-import { searchUserAccount } from '../../services/social/profile.service';
+import { acceptFriend, getListAskingToBeFriend, getListWantToAddMe, searchUserAccount } from '../../services/social/profile.service';
 
 function Friends() {
   const navigate = useNavigate();
@@ -13,6 +13,8 @@ function Friends() {
 
   const [friends, setFriends] = useState<UserAccount.IUserAccount[]>();
   const [loading, setLoading] = useState(true);
+
+  const [activeTab, setActiveTab] = useState<'friends' | 'pending' | 'requests'>('friends');
 
   useEffect(() => {
     async function fetchFriends() {
@@ -46,6 +48,46 @@ function Friends() {
     fetchSearchResults();
   }, [searchTerm]);
 
+  const handleFriendsTab = async () => {
+    setActiveTab('friends');
+    try {
+      const friendsData = await getFriendLeaderboard();
+      setFriends(friendsData);
+    } catch (error) {
+      console.error('Error fetching lessons:', error);
+    }
+  };
+
+  const handlePendingTab = async () => {
+    setActiveTab('pending');
+    try {
+      const friendsData = await getListAskingToBeFriend();
+      setFriends(friendsData);
+    } catch (error) {
+      console.error('Error fetching lessons:', error);
+    }
+  };
+
+  const handleRequestsTab = async () => {
+    setActiveTab('requests');
+    try {
+      const friendsData = await getListWantToAddMe();
+      setFriends(friendsData);
+    } catch (error) {
+      console.error('Error fetching lessons:', error);
+    }
+  };
+
+  const handleAcceptRequest = async (id: number) => {
+    try {
+      await acceptFriend(id);
+      const friendsData = await getListWantToAddMe();
+      setFriends(friendsData);
+    } catch (error) {
+      console.error('Error fetching lessons:', error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -60,9 +102,28 @@ function Friends() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Amis</h1>
+      <div className="flex justify-center mt-4 space-x-4">
+        <button
+          onClick={handleFriendsTab}
+          className={`px-4 py-2 rounded ${activeTab === 'friends' ? 'bg-main-four text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          Amis
+        </button>
+        <button
+          onClick={handlePendingTab}
+          className={`px-4 py-2 rounded ${activeTab === 'pending' ? 'bg-main-four text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          Demande envoyée
+        </button>
+        <button
+          onClick={handleRequestsTab}
+          className={`px-4 py-2 rounded ${activeTab === 'requests' ? 'bg-main-four text-white' : 'bg-gray-200 text-gray-700'}`}
+        >
+          Demande reçue
+        </button>
       </div>
+
+      <div className="flex justify-between items-center"></div>
 
       <div className="bg-white rounded-lg shadow-md">
         <div className="p-6">
@@ -86,6 +147,11 @@ function Friends() {
                   <button className="bg-main-four text-white px-4 py-2 rounded-lg" onClick={() => handleProfileClick(friend.id)}>
                     Voir le profil
                   </button>
+                  {activeTab === 'requests' && (
+                    <button className="bg-main-four text-white px-4 py-2 rounded-lg" onClick={() => handleAcceptRequest(friend.id)}>
+                      Accepter
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

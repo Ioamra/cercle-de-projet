@@ -86,7 +86,7 @@ function Lesson() {
               {lesson.similary_quizes.map((similaryQuiz) => (
                 <a
                   key={similaryQuiz.id}
-                  href={`/quizzes/${similaryQuiz.id}`}
+                  href={`/quiz/${similaryQuiz.id}`}
                   className="flex flex-col gap-2 w-72 p-4 border justify-between rounded-lg shadow-sm hover:bg-gray-100"
                 >
                   <h3 className="text-xl font-semibold">{similaryQuiz.title}</h3>

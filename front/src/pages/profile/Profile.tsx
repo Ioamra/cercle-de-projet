@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { UserAccount } from '../../models/userAccount.model';
+import { getFriendLeaderboard } from '../../services/social/friends.service';
 import { friendRequest, getOneUserAccount } from '../../services/social/profile.service';
 
 function Profile() {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<UserAccount.IUserAccountWithRecentActivity | null>(null);
+  const [friends, setFriends] = useState<UserAccount.IUserAccount[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
@@ -14,7 +16,9 @@ function Profile() {
     async function fetchUser() {
       try {
         const userData = await getOneUserAccount(+id!);
+        const friendsData = await getFriendLeaderboard();
         setUser(userData);
+        setFriends(friendsData);
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -46,7 +50,7 @@ function Profile() {
               <p className="text-gray-600">{user.email}</p>
             </div>
           </div>
-          {user.id !== currentUser.id && (
+          {user.id !== currentUser.id && !friends.some((friend) => friend.id === user.id) && (
             <button
               className="flex items-center space-x-2 bg-main-four text-white px-4 py-2 rounded-lg hover:bg-main-five"
               onClick={async () => await friendRequest(+id!)}
@@ -54,7 +58,7 @@ function Profile() {
               <svg className="w-5 h-5" fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span>Ajouter un ami</span>
+              <span>Ajouter en ami</span>
             </button>
           )}
         </div>

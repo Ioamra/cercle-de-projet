@@ -1,7 +1,7 @@
 import { Quiz } from '../../models/quiz.model';
 import { apiService, apiServiceWithoutToken } from '../request.service';
 
-export async function getQuiz(id: number): Promise<Quiz.IQuiz> {
+export async function getQuiz(id: number): Promise<Quiz.IQuizWithoutQuizResult> {
   try {
     const response = await apiServiceWithoutToken.get(`/quiz/${id}`);
     return response.data;

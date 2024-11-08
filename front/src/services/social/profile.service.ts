@@ -24,7 +24,7 @@ export async function friendRequest(id: number): Promise<{ message: string }> {
 
 export async function acceptFriend(id: number): Promise<{ message: string }> {
   try {
-    const response = await apiService.post('/user-account/accept-friend/' + id);
+    const response = await apiService.put('/user-account/accept-friend/' + id);
     return response.data;
   } catch (error) {
     console.error('Error fetching lessons:', error);
@@ -52,7 +52,7 @@ export async function getAllAvatar(): Promise<Avatar.IAvatar[]> {
   }
 }
 
-export async function getListAskingToBeFriend(): Promise<Avatar.IAvatar[]> {
+export async function getListAskingToBeFriend(): Promise<UserAccount.IUserAccount[]> {
   try {
     const response = await apiService.get('/user-account/list-ask-to-be-friend');
     return response.data;
@@ -62,7 +62,7 @@ export async function getListAskingToBeFriend(): Promise<Avatar.IAvatar[]> {
   }
 }
 
-export async function getListWantToAddMe(): Promise<Avatar.IAvatar[]> {
+export async function getListWantToAddMe(): Promise<UserAccount.IUserAccount[]> {
   try {
     const response = await apiService.get('/user-account/list-want-to-add-me');
     return response.data;

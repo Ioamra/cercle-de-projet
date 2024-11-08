@@ -10,7 +10,7 @@ function Quiz() {
 
   const navigate = useNavigate();
 
-  const [quiz, setQuiz] = useState<QuizModel.IQuiz | null>(null);
+  const [quiz, setQuiz] = useState<QuizModel.IQuizWithoutQuizResult | null>(null);
   const [questions, setQuestions] = useState<QuizModel.IQuizQuestion[] | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -61,6 +61,7 @@ function Quiz() {
 
   const nextQuestion = () => {
     if (selectedAnswer !== null) {
+      console.log(currentQuestionIndex);
       if (currentQuestionIndex < quiz.questions.length - 1) {
         setQuestionResult((prevResults) => {
           const updatedResults = [
@@ -74,6 +75,7 @@ function Quiz() {
           return updatedResults;
         });
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+        console.log(questionResult);
         setSelectedAnswer(null);
       } else {
         console.log('Quiz terminé !');
