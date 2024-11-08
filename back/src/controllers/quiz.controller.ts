@@ -26,7 +26,7 @@ export const findAll = async (req: Request, res: Response): Promise<Response<Qui
   }
 };
 
-export const findOne = async (req: Request, res: Response): Promise<Response<Quiz.IQuiz>> => {
+export const findOne = async (req: Request, res: Response): Promise<Response<Quiz.IQuizWithoutQuizResult>> => {
   try {
     const id = parseInt(req.params.id);
     const { rows } = await pool.query(
@@ -37,8 +37,6 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Qui
         quiz.description,
         quiz.time_in_min,
         quiz.difficulty,
-        AVG(quiz_result.note)*10 AS avg_note,
-        COUNT(quiz_result.id) AS play_count,
         ARRAY_AGG(JSON_BUILD_OBJECT(
           'id', question.id,
           'content', question.content,
@@ -50,7 +48,6 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Qui
         )) AS questions
       FROM quiz
       INNER JOIN question ON question.id_quiz = quiz.id
-      LEFT JOIN quiz_result ON quiz_result.id_quiz = quiz.id
       WHERE quiz.id = $1
 	    GROUP BY quiz.id
     `,

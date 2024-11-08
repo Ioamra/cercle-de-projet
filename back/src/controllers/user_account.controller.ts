@@ -85,6 +85,12 @@ export const register = async (req: Request, res: Response): Promise<Response<Us
 export const findOne = async (req: Request, res: Response): Promise<Response<UserAccount.IUserAccountWithRecentActivity>> => {
   try {
     const id = parseInt(req.params.id);
+
+    let idInitiator = null;
+    if (req.headers.authorization === undefined) {
+      idInitiator = getIdUserAccountInToken(req.headers.authorization!);
+    }
+
     const { rows } = await pool.query(
       `
       SELECT
@@ -104,7 +110,15 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Use
         'difficulty', quiz.difficulty,
         'creation_date', quiz_result.creation_date,
         'note', quiz_result.note
-      )) FILTER (WHERE quiz_result.id IS NOT NULL), '{}') AS recent_activity
+      )) FILTER (WHERE quiz_result.id IS NOT NULL), '{}') AS recent_activity,
+       CASE WHEN EXISTS (
+        SELECT 1 FROM user_account_has_friend
+        WHERE (
+          (id_user_account = user_account.id AND id_friend = $2)
+          OR
+          (id_user_account = $2 AND id_friend = user_account.id)
+        ) AND accepted = true
+      ) THEN true ELSE false END AS is_friend
       FROM user_account
       INNER JOIN avatar ON avatar.id = user_account.id_avatar
       LEFT JOIN quiz_result ON quiz_result.id_user_account = user_account.id
@@ -112,7 +126,7 @@ export const findOne = async (req: Request, res: Response): Promise<Response<Use
       WHERE user_account.id = $1
       GROUP BY user_account.id, avatar.img;
     `,
-      [id],
+      [id, idInitiator],
     );
     if (rows.length) {
       return res.status(200).json(rows[0]);
@@ -164,20 +178,23 @@ export const findLeaderboard = async (req: Request, res: Response): Promise<Resp
     const { rows } = await pool.query(
       `
       SELECT
-        user_account.id,
-        user_account.pseudo,
-        user_account.email,
-        user_account.first_name,
-        user_account.last_name,
-        'localhost:3000/api/img/' || avatar.img AS avatar,
-        AVG(quiz_result.note)*10 AS avg_note,
-        COUNT(quiz_result.note) AS nb_quiz_make,
-        SUM(quiz_result.note)*10 AS total_note
+      user_account.id,
+      user_account.pseudo,
+      user_account.email,
+      user_account.first_name,
+      user_account.last_name,
+      'localhost:3000/api/img/' || avatar.img AS avatar,
+      AVG(quiz_result.note)*10 AS avg_note,
+      COUNT(quiz_result.note) AS nb_quiz_make,
+      SUM(quiz_result.note)*10 AS total_note
       FROM user_account
       INNER JOIN avatar ON avatar.id = user_account.id_avatar
       LEFT JOIN quiz_result ON user_account.id = quiz_result.id_user_account
-      GROUP BY user_account.id
-      ORDER BY $1 DESC;
+      GROUP BY user_account.id, avatar.img
+      ORDER BY 
+      CASE WHEN $1 = 'avg_note' THEN AVG(quiz_result.note)*10 END DESC NULLS LAST,
+      CASE WHEN $1 = 'nb_quiz_make' THEN COUNT(quiz_result.note) END DESC NULLS LAST,
+      CASE WHEN $1 = 'total_note' THEN SUM(quiz_result.note)*10 END DESC NULLS LAST;
       `,
       [order],
     );
@@ -213,11 +230,11 @@ export const findFriendLeaderboard = async (req: Request, res: Response): Promis
       WHERE user_account.id IN (
         SELECT user_account_has_friend.id_friend
         FROM user_account_has_friend
-        WHERE user_account_has_friend.id_user_account = $1
+        WHERE user_account_has_friend.id_user_account = $1 AND user_account_has_friend.accepted = true
         UNION
         SELECT user_account_has_friend.id_user_account
         FROM user_account_has_friend
-        WHERE user_account_has_friend.id_friend = $1
+        WHERE user_account_has_friend.id_friend = $1 AND user_account_has_friend.accepted = true
       )
       GROUP BY user_account.id, avatar.img
       ORDER BY $2 DESC;
@@ -252,10 +269,9 @@ export const findListAskingToBeFriend = async (req: Request, res: Response): Pro
       WHERE user_account.id IN (
         SELECT user_account_has_friend.id_friend
         FROM user_account_has_friend
-        WHERE user_account_has_friend.id_user_account = $1
+        WHERE user_account_has_friend.id_user_account = $1 AND user_account_has_friend.accepted = false
       )
-        AND user_account_has_friend.accepted = false
-      GROUP BY user_account.id;
+      GROUP BY user_account.id, avatar.img;
       `,
       [id],
     );
@@ -287,10 +303,9 @@ export const findListWantToAddMe = async (req: Request, res: Response): Promise<
       WHERE user_account.id IN (
         SELECT user_account_has_friend.id_user_account
         FROM user_account_has_friend
-        WHERE user_account_has_friend.id_friend = $1
+        WHERE user_account_has_friend.id_friend = $1 AND user_account_has_friend.accepted = false
       )
-        AND user_account_has_friend.accepted = false
-      GROUP BY user_account.id;
+      GROUP BY user_account.id, avatar.img;
       `,
       [id],
     );
@@ -317,9 +332,13 @@ export const friendRequest = async (req: Request, res: Response): Promise<Respon
 export const acceptFriend = async (req: Request, res: Response): Promise<Response<{ message: string }>> => {
   try {
     const idInitiator = getIdUserAccountInToken(req.headers.authorization!);
-    const { id } = req.body;
+    const id = parseInt(req.params.id);
 
-    await pool.query(`UPDATE user_account_has_friend SET accepted = true WHERE id_user_account = $1 AND id_friend = $2`, [id, idInitiator]);
+    await pool.query(
+      `UPDATE user_account_has_friend SET accepted = true 
+      WHERE (id_user_account = $1 AND id_friend = $2) OR (id_user_account = $2 AND id_friend = $1)`,
+      [id, idInitiator],
+    );
     return res.status(201).json({ message: 'Friend request send' });
   } catch (error) {
     console.log(error);

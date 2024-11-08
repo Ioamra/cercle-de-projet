@@ -24,6 +24,6 @@ router.get('/friend-leaderboard/:order', haveToken, findFriendLeaderboard);
 router.post('/register', register);
 router.post('/login', login);
 router.post('/friend-request/:id', haveToken, friendRequest);
-router.post('/accept-friend/:id', haveToken, acceptFriend);
+router.put('/accept-friend/:id', haveToken, acceptFriend);
 
 export default router;

@@ -37,4 +37,13 @@ export declare module Quiz {
     id_response: number;
     is_correct: boolean;
   }
+
+  interface IQuizWithoutQuizResult {
+    id: number;
+    title: string;
+    description: string;
+    time_in_min: number;
+    difficulty: string;
+    questions: IQuizQuestion[];
+  }
 }
